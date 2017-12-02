@@ -49,7 +49,14 @@ public class TestProdCons extends Simulateur {
 	// Fichier xml :
 
 	public static void main(String[] args) {
-		new TestProdCons(new Observateur()).start();
-		this.init(("options/" + "options.xml").toString());
+		TestProdCons myTest = new TestProdCons(new Observateur());
+		myTest.start();
+		try {
+			myTest.init(("options/" + "options.xml").toString());
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
+				| IOException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
 	}
 }
