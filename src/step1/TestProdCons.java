@@ -1,6 +1,7 @@
 package step1;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
 import java.util.Properties;
@@ -16,20 +17,35 @@ public class TestProdCons extends Simulateur {
 	int tempsMoyenProduction;
 	int deviationTempsMoyenProduction;
 	int tempsMoyenConsommation;
+	int deviationTempsMoyenConsommation;
 	int nombreMoyenDeProduction;
 	int deviationNombreMoyenDeProduction;
 	int nombreMoyenNbExemplaire;
 	int deviationNombreMoyenNbExemplaire;
 
+	protected ArrayList<Consommateur> consumer;
+	protected ArrayList<Producteur> producer;
+
+	protected ProdCons buffer;
+
 	public TestProdCons(Observateur observateur) {
 		super(observateur);
 		// TODO Auto-generated constructor stub
+		consumer = new ArrayList<Consommateur>();
+		producer = new ArrayList<Producteur>();
+		try {
+			init("options/options.xml");
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
+				| IOException e) {
+			e.getMessage();
+		}
+
+		buffer = new ProdCons();
 	}
 
 	@Override
 	protected void run() throws Exception {
 		// TODO Auto-generated method stub
-
 	}
 
 	protected void init(String file) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException,
@@ -46,17 +62,8 @@ public class TestProdCons extends Simulateur {
 		}
 	}
 
-	// Fichier xml :
-
 	public static void main(String[] args) {
 		TestProdCons myTest = new TestProdCons(new Observateur());
 		myTest.start();
-		try {
-			myTest.init(("options/" + "options.xml").toString());
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
-				| IOException e) {
-			e.getMessage();
-			e.printStackTrace();
-		}
 	}
 }
