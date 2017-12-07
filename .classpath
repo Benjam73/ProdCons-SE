@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="src/step1/" kind="src" path=""/>
-	<classpathentry kind="src" path="src/step1"/>
-	<classpathentry kind="lib" path="/home/besnier-benjamin/RICM4/S7/OS/Projet/ProdCons.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="ProdCons.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/besnier-benjamin/RICM4/S7/OS/Projet/Doc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
