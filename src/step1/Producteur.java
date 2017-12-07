@@ -32,7 +32,7 @@ public class Producteur extends Acteur implements _Producteur {
 		// Put n in buffer
 		int nbMessageMax = nbMessageToProduce.next();
 		while (numberCurrentMessage < nbMessageMax) {
-			MessageX newMessage = new MessageX("Teub");
+			MessageX newMessage = new MessageX(this);
 			int timeToWait = treatmentTime.next();
 			try {
 				sleep(timeToWait);

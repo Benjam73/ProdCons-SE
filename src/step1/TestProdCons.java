@@ -97,7 +97,7 @@ public class TestProdCons extends Simulateur {
 		Consommateur cons;
 		try {
 			System.out.println("Creating messageX mess, hence adding producer to mess");
-			prod = new Producteur(moyenneTempsDeTraitement, deviationTempsDeTraitement);
+			prod = new Producteur(1, 1, new Aleatoire(1, 1), new ProdCons());
 			MessageX mess = new MessageX(prod);
 			System.out.println("Mess : " + mess.toString());
 			System.out.println("Adding consummer to mess");
