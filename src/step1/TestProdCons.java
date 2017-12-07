@@ -23,14 +23,19 @@ public class TestProdCons extends Simulateur {
 	int nombreMoyenNbExemplaire;
 	int deviationNombreMoyenNbExemplaire;
 
+	protected ProdCons buffer;
+
 	public TestProdCons(Observateur observateur) {
 
 		super(observateur);
-	}
+		try {
+			init("options/options.xml");
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
+				| IOException e) {
+			e.getMessage();
+		}
 
-	@Override
-	protected void run() throws Exception {
-
+		buffer = new ProdCons();
 	}
 
 	protected void init(String file) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException,
@@ -76,5 +81,11 @@ public class TestProdCons extends Simulateur {
 			e.printStackTrace();
 		}
 		// End(Test MessageX toString)
+	}
+
+	@Override
+	protected void run() throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 }
