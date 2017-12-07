@@ -9,9 +9,9 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 	private int nbMessagesConsommes;
 
-	protected Consommateur(int type, Observateur observateur, int moyenneTempsDeTraitement,
-			int deviationTempsDeTraitement) throws ControlException {
-		super(type, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
+	protected Consommateur(int moyenneTempsDeTraitement, int deviationTempsDeTraitement) throws ControlException {
+		super(Type.typeConsommateur.getValue(), new Observateur(), moyenneTempsDeTraitement,
+				deviationTempsDeTraitement);
 		// TODO Auto-generated constructor stub
 		nbMessagesConsommes = 0;
 	}

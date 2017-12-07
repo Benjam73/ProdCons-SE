@@ -6,6 +6,7 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
 import java.util.Properties;
 
+import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons.Simulateur;
 
@@ -24,7 +25,8 @@ public class TestProdCons extends Simulateur {
 	int deviationNombreMoyenNbExemplaire;
 
 	protected ArrayList<Consommateur> consumer;
-	protected ArrayList<Producteur> producer;
+
+	// protected ArrayList<Producteur> producer;
 
 	protected ProdCons buffer;
 
@@ -32,20 +34,32 @@ public class TestProdCons extends Simulateur {
 		super(observateur);
 		// TODO Auto-generated constructor stub
 		consumer = new ArrayList<Consommateur>();
-		producer = new ArrayList<Producteur>();
 		try {
 			init("options/options.xml");
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
 				| IOException e) {
 			e.getMessage();
 		}
-
 		buffer = new ProdCons();
 	}
 
 	@Override
 	protected void run() throws Exception {
-		// TODO Auto-generated method stub
+		// Producer
+		if (nbProd > 0) {
+			for (int i = 0; i < nbProd; i++) {
+				Aleatoire nbMessageToProduce = new Aleatoire(nombreMoyenDeProduction, deviationNombreMoyenDeProduction);
+				Producteur producer = new Producteur(tempsMoyenProduction, deviationTempsMoyenProduction,
+						nbMessageToProduce, buffer);
+				producer.start();
+			}
+
+		}
+		// Consumer
+		// TODO
+		for (int i = 0; i < nbCons; i++) {
+
+		}
 	}
 
 	protected void init(String file) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException,
@@ -63,7 +77,7 @@ public class TestProdCons extends Simulateur {
 	}
 
 	public static void main(String[] args) {
-		TestProdCons myTest = new TestProdCons(new Observateur());
-		myTest.start();
+		new TestProdCons(new Observateur()).start();
+		// myTest.start();
 	}
 }
