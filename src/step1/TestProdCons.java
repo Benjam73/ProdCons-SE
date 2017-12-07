@@ -13,22 +13,22 @@ import jus.poc.prodcons.Simulateur;
 
 public class TestProdCons extends Simulateur {
 
-	int nbProd;
-	int nbCons;
-	int nbBuffer;
-	int tempsMoyenProduction;
-	int deviationTempsMoyenProduction;
-	int tempsMoyenConsommation;
-	int deviationTempsMoyenConsommation;
-	int nombreMoyenDeProduction;
-	int deviationNombreMoyenDeProduction;
-	int nombreMoyenNbExemplaire;
-	int deviationNombreMoyenNbExemplaire;
+	private int nbProd;
+	private int nbCons;
+	private int nbBuffer;
+	private int tempsMoyenProduction;
+	private int deviationTempsMoyenProduction;
+	private int tempsMoyenConsommation;
+	private int deviationTempsMoyenConsommation;
+	private int nombreMoyenDeProduction;
+	private int deviationNombreMoyenDeProduction;
+	private int nombreMoyenNbExemplaire;
+	private int deviationNombreMoyenNbExemplaire;
 
-	protected ArrayList<Consommateur> consumer;
+	private ArrayList<Consommateur> consumer;
 	private Aleatoire nbMessageToProduceRandomVariable;
 
-	protected ProdCons buffer;
+	private ProdCons buffer;
 
 	public TestProdCons(Observateur observateur) {
 
@@ -107,7 +107,6 @@ public class TestProdCons extends Simulateur {
 		} catch (ControlException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Buffer end" + myTest.buffer.toString());
 		// End(Test MessageX toString)
 	}
 
