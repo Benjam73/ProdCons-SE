@@ -5,6 +5,7 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
 import java.util.Properties;
 
+import jus.poc.prodcons.ControlException;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons.Simulateur;
 
@@ -16,19 +17,19 @@ public class TestProdCons extends Simulateur {
 	int tempsMoyenProduction;
 	int deviationTempsMoyenProduction;
 	int tempsMoyenConsommation;
+	int deviationTempsMoyenConsommation;
 	int nombreMoyenDeProduction;
 	int deviationNombreMoyenDeProduction;
 	int nombreMoyenNbExemplaire;
 	int deviationNombreMoyenNbExemplaire;
 
 	public TestProdCons(Observateur observateur) {
+
 		super(observateur);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void run() throws Exception {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -46,8 +47,6 @@ public class TestProdCons extends Simulateur {
 		}
 	}
 
-	// Fichier xml :
-
 	public static void main(String[] args) {
 		TestProdCons myTest = new TestProdCons(new Observateur());
 		myTest.start();
@@ -58,5 +57,24 @@ public class TestProdCons extends Simulateur {
 			e.getMessage();
 			e.printStackTrace();
 		}
+
+		// Test MessageX toString
+		int moyenneTempsDeTraitement = 10;
+		int deviationTempsDeTraitement = 1;
+		Producteur prod;
+		Consommateur cons;
+		try {
+			System.out.println("Creating messageX mess, hence adding producer to mess");
+			prod = new Producteur(moyenneTempsDeTraitement, deviationTempsDeTraitement);
+			MessageX mess = new MessageX(prod);
+			System.out.println("Mess : " + mess.toString());
+			System.out.println("Adding consummer to mess");
+			cons = new Consommateur(moyenneTempsDeTraitement, deviationTempsDeTraitement);
+			mess.setMessageConsumer(cons);
+			System.out.println("Mess : " + mess.toString());
+		} catch (ControlException e) {
+			e.printStackTrace();
+		}
+		// End(Test MessageX toString)
 	}
 }

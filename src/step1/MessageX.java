@@ -4,14 +4,59 @@ import jus.poc.prodcons.Message;
 
 public class MessageX implements Message {
 
-	public String toString() {
-		try {
-			throw new Exception("Not implemented yet");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+	// MessageX is the productionNumber-th produced by messageProducer
+	private Producteur messageProducer;
+	private Integer productionNumber;
 
+	// MessageX is the consumptionNumber-th consumed by messageConsumer
+	private Consommateur messageConsumer;
+	private Integer consumptionNumber;
+
+	public MessageX(Producteur messageProducer) {
+		super();
+		this.messageProducer = messageProducer;
+		this.productionNumber = messageProducer.alreadyProduced();
+		this.messageConsumer = null;
+		this.consumptionNumber = null;
+	}
+
+	public String toString() {
+		String resultString = new String();
+		resultString = resultString.concat(
+				getProductionNumber().toString() + "-th message of messageProducer " + getMessageProducer().toString());
+		if (messageConsumer != null) {
+			resultString = resultString.concat(", " + getConsumptionNumber().toString() + "-th consummed by "
+					+ getMessageConsumer().toString() + ". ");
+		} else {
+			resultString = resultString.concat(", not consummed yet. ");
+		}
+		return resultString;
+	}
+
+	// Setters
+	public void setMessageConsumer(Consommateur messageConsumer) {
+		this.messageConsumer = messageConsumer;
+		setConsumptionNumber(messageConsumer.nombreDeMessages());
+	}
+
+	private void setConsumptionNumber(Integer consumptionNumber) {
+		this.consumptionNumber = consumptionNumber;
+	}
+
+	// Getters
+	public Producteur getMessageProducer() {
+		return messageProducer;
+	}
+
+	public Integer getProductionNumber() {
+		return productionNumber;
+	}
+
+	public Consommateur getMessageConsumer() {
+		return messageConsumer;
+	}
+
+	public Integer getConsumptionNumber() {
+		return consumptionNumber;
 	}
 }

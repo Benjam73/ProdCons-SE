@@ -7,16 +7,27 @@ import jus.poc.prodcons._Producteur;
 
 public class Producteur extends Acteur implements _Producteur {
 
-	protected Producteur(int type, Observateur observateur, int moyenneTempsDeTraitement,
-			int deviationTempsDeTraitement) throws ControlException {
-		super(type, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
-		// TODO Auto-generated constructor stub
+	// Number of messages already produced by Producteur
+	private Integer alreadyProduced;
+
+	public Producteur(int moyenneTempsTraitement, int deviationTempsTraitement) throws ControlException {
+		// Producer type = int 1
+		super(1, new Observateur(), moyenneTempsTraitement, deviationTempsTraitement);
+		alreadyProduced = 0;
 	}
 
 	@Override
 	public int nombreDeMessages() {
-		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public Integer alreadyProduced() {
+		return alreadyProduced;
+	}
+
+	@Override
+	public String toString() {
+		return "[Producteur " + this.identification() + "]";
 	}
 
 }

@@ -9,41 +9,18 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 	private int nbMessagesConsommes;
 
-	protected Consommateur(int type, Observateur observateur, int moyenneTempsDeTraitement,
-			int deviationTempsDeTraitement) throws ControlException {
-		super(type, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
-		// TODO Auto-generated constructor stub
+	protected Consommateur(int moyenneTempsDeTraitement, int deviationTempsDeTraitement) throws ControlException {
+		super(2, new Observateur(), moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		nbMessagesConsommes = 0;
 	}
 
-	@Override
-	public int deviationTempsDeTraitement() {
-		return deviationTempsDeTraitement;
-	}
-
-	@Override
-	public int identification() {
-		return super.identification();
-	}
-
-	@Override
-	public int moyenneTempsDeTraitement() {
-		return moyenneTempsDeTraitement;
+	public String toString() {
+		return "[Consommateur " + this.identification() + "]";
 	}
 
 	@Override
 	public int nombreDeMessages() {
 		return nbMessagesConsommes;
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public String toString() {
-		return "Consommateur" + this.identification();
 	}
 
 }
