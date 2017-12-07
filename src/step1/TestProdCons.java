@@ -13,23 +13,22 @@ import jus.poc.prodcons.Simulateur;
 
 public class TestProdCons extends Simulateur {
 
-	int nbProd;
-	int nbCons;
-	int nbBuffer;
-	int tempsMoyenProduction;
-	int deviationTempsMoyenProduction;
-	int tempsMoyenConsommation;
-	int deviationTempsMoyenConsommation;
-	int nombreMoyenDeProduction;
-	int deviationNombreMoyenDeProduction;
-	int nombreMoyenNbExemplaire;
-	int deviationNombreMoyenNbExemplaire;
+	private int nbProd;
+	private int nbCons;
+	private int nbBuffer;
+	private int tempsMoyenProduction;
+	private int deviationTempsMoyenProduction;
+	private int tempsMoyenConsommation;
+	private int deviationTempsMoyenConsommation;
+	private int nombreMoyenDeProduction;
+	private int deviationNombreMoyenDeProduction;
+	private int nombreMoyenNbExemplaire;
+	private int deviationNombreMoyenNbExemplaire;
 
-	protected ArrayList<Consommateur> consumer;
+	private ArrayList<Consommateur> consumer;
+	private Aleatoire nbMessageToProduceRandomVariable;
 
-	// protected ArrayList<Producteur> producer;
-
-	protected ProdCons buffer;
+	private ProdCons buffer;
 
 	public TestProdCons(Observateur observateur) {
 
@@ -43,6 +42,7 @@ public class TestProdCons extends Simulateur {
 			e.getMessage();
 		}
 		buffer = new ProdCons();
+		nbMessageToProduceRandomVariable = new Aleatoire(nombreMoyenDeProduction, deviationNombreMoyenDeProduction);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class TestProdCons extends Simulateur {
 		// Producer
 		if (nbProd > 0) {
 			for (int i = 0; i < nbProd; i++) {
-				Aleatoire nbMessageToProduce = new Aleatoire(nombreMoyenDeProduction, deviationNombreMoyenDeProduction);
+				int nbMessageToProduce = nbMessageToProduceRandomVariable.next();
 				Producteur producer = new Producteur(tempsMoyenProduction, deviationTempsMoyenProduction,
 						nbMessageToProduce, buffer);
 				producer.start();
@@ -97,7 +97,7 @@ public class TestProdCons extends Simulateur {
 		Consommateur cons;
 		try {
 			System.out.println("Creating messageX mess, hence adding producer to mess");
-			prod = new Producteur(1, 1, new Aleatoire(1, 1), new ProdCons());
+			prod = new Producteur(moyenneTempsDeTraitement, deviationTempsDeTraitement, 3, myTest.buffer);
 			MessageX mess = new MessageX(prod);
 			System.out.println("Mess : " + mess.toString());
 			System.out.println("Adding consummer to mess");

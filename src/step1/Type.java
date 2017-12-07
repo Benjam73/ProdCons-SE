@@ -1,5 +1,6 @@
 package step1;
 
+
 public enum Type {
 	typeProducteur(1), typeConsommateur(2);
 

@@ -17,6 +17,12 @@ public class Consommateur extends Acteur implements _Consommateur {
 		nbMessagesConsommes = 0;
 	}
 
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
+	}
+
 	public String toString() {
 		return "[Consommateur " + this.identification() + "]";
 	}

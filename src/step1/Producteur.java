@@ -10,19 +10,17 @@ public class Producteur extends Acteur implements _Producteur {
 
 	// Number of messages already produced by Producteur
 	private Integer alreadyProduced;
-	private Aleatoire nbMessageToProduce;
+	private int nbMessageToProduce;
 	private ProdCons buffer;
-	private Aleatoire treatmentTime;
-	private int numberCurrentMessage;
+	private Aleatoire productionDurationRandomVariable;
 
-	protected Producteur(int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Aleatoire nbMessageToProduce,
+	protected Producteur(int moyenneTempsDeTraitement, int deviationTempsDeTraitement, int nbMessageToProduce,
 			ProdCons buffer) throws ControlException {
 		super(Type.typeProducteur.getValue(), new Observateur(), moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		// TODO Auto-generated constructor stub
 		this.nbMessageToProduce = nbMessageToProduce;
 		this.buffer = buffer;
-		treatmentTime = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
-		numberCurrentMessage = 0;
+		productionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		alreadyProduced = 0;
 
 	}
@@ -30,18 +28,16 @@ public class Producteur extends Acteur implements _Producteur {
 	@Override
 	public void run() {
 		// Put n in buffer
-		int nbMessageMax = nbMessageToProduce.next();
-		while (numberCurrentMessage < nbMessageMax) {
+		while (alreadyProduced < nbMessageToProduce) {
 			MessageX newMessage = new MessageX(this);
-			int timeToWait = treatmentTime.next();
+			int timeToWait = productionDurationRandomVariable.next();
 			try {
 				sleep(timeToWait);
 				this.buffer.put(this, newMessage);
-
+				alreadyProduced++;
 			} catch (Exception e) {
 				e.getMessage();
 			}
-			numberCurrentMessage++;
 		}
 
 	}
