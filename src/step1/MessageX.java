@@ -12,15 +12,23 @@ public class MessageX implements Message {
 	private Consommateur messageConsumer;
 	private Integer consumptionNumber;
 
+	// Unique id built using Producer and production number
+	private String id;
+
 	public MessageX(Producteur messageProducer) {
 		super();
 		this.messageProducer = messageProducer;
 		this.productionNumber = messageProducer.alreadyProduced();
+		this.id = "[" + messageProducer.getId() + ", " + getProductionNumber() + "]";
 		this.messageConsumer = null;
 		this.consumptionNumber = null;
 	}
 
 	public String toString() {
+		return id;
+	}
+
+	public String history() {
 		String resultString = new String();
 		resultString = resultString.concat(
 				getProductionNumber().toString() + "-th message of messageProducer " + getMessageProducer().toString());
@@ -60,3 +68,4 @@ public class MessageX implements Message {
 		return consumptionNumber;
 	}
 }
+
