@@ -26,8 +26,7 @@ public class TestProdCons extends Simulateur {
 	int deviationNombreMoyenNbExemplaire;
 
 	protected ArrayList<Consommateur> consumer;
-
-	// protected ArrayList<Producteur> producer;
+	private Aleatoire nbMessageToProduceRandomVariable;
 
 	protected ProdCons buffer;
 
@@ -43,6 +42,7 @@ public class TestProdCons extends Simulateur {
 			e.getMessage();
 		}
 		buffer = new ProdCons();
+		nbMessageToProduceRandomVariable = new Aleatoire(nombreMoyenDeProduction, deviationNombreMoyenDeProduction);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class TestProdCons extends Simulateur {
 		// Producer
 		if (nbProd > 0) {
 			for (int i = 0; i < nbProd; i++) {
-				Aleatoire nbMessageToProduce = new Aleatoire(nombreMoyenDeProduction, deviationNombreMoyenDeProduction);
+				int nbMessageToProduce = nbMessageToProduceRandomVariable.next();
 				Producteur producer = new Producteur(tempsMoyenProduction, deviationTempsMoyenProduction,
 						nbMessageToProduce, buffer);
 				producer.start();
@@ -97,7 +97,7 @@ public class TestProdCons extends Simulateur {
 		Consommateur cons;
 		try {
 			System.out.println("Creating messageX mess, hence adding producer to mess");
-			prod = new Producteur(1, 1, new Aleatoire(1, 1), new ProdCons());
+			prod = new Producteur(moyenneTempsDeTraitement, deviationTempsDeTraitement, 3, myTest.buffer);
 			MessageX mess = new MessageX(prod);
 			System.out.println("Mess : " + mess.toString());
 			System.out.println("Adding consummer to mess");
@@ -107,6 +107,7 @@ public class TestProdCons extends Simulateur {
 		} catch (ControlException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Buffer end" + myTest.buffer.toString());
 		// End(Test MessageX toString)
 	}
 
