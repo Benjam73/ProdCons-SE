@@ -60,7 +60,10 @@ public class TestProdCons extends Simulateur {
 		// Consumer
 		// TODO
 		for (int i = 0; i < nbCons; i++) {
-
+			Consommateur newConsumer = new Consommateur(tempsMoyenConsommation, deviationTempsMoyenConsommation,
+					buffer);
+			consumer.add(newConsumer);
+			newConsumer.start();
 		}
 	}
 
@@ -101,7 +104,7 @@ public class TestProdCons extends Simulateur {
 			MessageX mess = new MessageX(prod);
 			System.out.println("Mess : " + mess.toString());
 			System.out.println("Adding consummer to mess");
-			cons = new Consommateur(moyenneTempsDeTraitement, deviationTempsDeTraitement);
+			cons = new Consommateur(moyenneTempsDeTraitement, deviationTempsDeTraitement, myTest.buffer);
 			mess.setMessageConsumer(cons);
 			System.out.println("Mess : " + mess.toString());
 		} catch (ControlException e) {
