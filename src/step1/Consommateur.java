@@ -10,8 +10,17 @@ public class Consommateur extends Acteur implements _Consommateur {
 	private int nbMessagesConsommes;
 
 	protected Consommateur(int moyenneTempsDeTraitement, int deviationTempsDeTraitement) throws ControlException {
-		super(2, new Observateur(), moyenneTempsDeTraitement, deviationTempsDeTraitement);
+
+		super(Type.typeConsommateur.getValue(), new Observateur(), moyenneTempsDeTraitement,
+				deviationTempsDeTraitement);
+		// TODO Auto-generated constructor stub
 		nbMessagesConsommes = 0;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
 	}
 
 	public String toString() {
