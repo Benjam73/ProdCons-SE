@@ -27,7 +27,7 @@ public class ProdCons implements Tampon {
 	@Override
 	public synchronized Message get(_Consommateur arg0) throws Exception, InterruptedException {
 		while (!(enAttente() > 0)) {
-			arg0.wait();
+			wait();
 		}
 		Message resultingMessage = queue.poll();
 		if (resultingMessage == null) {
@@ -40,7 +40,7 @@ public class ProdCons implements Tampon {
 	@Override
 	public synchronized void put(_Producteur arg0, Message arg1) throws Exception, InterruptedException {
 		while (!(enAttente() < taille())) {
-			arg0.wait();
+			wait();
 		}
 		queue.add(arg1);
 		notifyAll();

@@ -19,7 +19,7 @@ public class MessageX implements Message {
 		super();
 		this.messageProducer = messageProducer;
 		this.productionNumber = messageProducer.alreadyProduced();
-		this.id = "[" + messageProducer.getId() + ", " + getProductionNumber() + "]";
+		this.id = "[" + messageProducer.identification() + ", " + getProductionNumber() + "]";
 		this.messageConsumer = null;
 		this.consumptionNumber = null;
 	}
@@ -68,4 +68,3 @@ public class MessageX implements Message {
 		return consumptionNumber;
 	}
 }
-

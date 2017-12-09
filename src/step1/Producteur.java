@@ -14,15 +14,16 @@ public class Producteur extends Acteur implements _Producteur {
 	private int nbMessageToProduce;
 	private ProdCons buffer;
 	private Aleatoire productionDurationRandomVariable;
+	private TestProdCons simulator;
 
-	protected Producteur(int moyenneTempsDeTraitement, int deviationTempsDeTraitement, int nbMessageToProduce,
-			ProdCons buffer) throws ControlException {
+	protected Producteur(TestProdCons simulator, int moyenneTempsDeTraitement, int deviationTempsDeTraitement,
+			int nbMessageToProduce, ProdCons buffer) throws ControlException {
 		super(Type.typeProducteur.getValue(), new Observateur(), moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		this.nbMessageToProduce = nbMessageToProduce;
 		this.buffer = buffer;
 		productionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		alreadyProduced = 0;
-
+		this.simulator = simulator;
 	}
 
 	@Override
@@ -38,6 +39,7 @@ public class Producteur extends Acteur implements _Producteur {
 				e.getMessage();
 			}
 		}
+		simulator.removeProducer(this);
 	}
 
 	private void oneNewMessageCreated() {

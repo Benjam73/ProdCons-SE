@@ -3,6 +3,7 @@ package step1;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -25,7 +26,9 @@ public class TestProdCons extends Simulateur {
 	private int nombreMoyenNbExemplaire;
 	private int deviationNombreMoyenNbExemplaire;
 
-	private ArrayList<Consommateur> consumer;
+	private List<Consommateur> consumerList;
+	private List<Producteur> producerList;
+
 	private Aleatoire nbMessageToProduceRandomVariable;
 
 	private ProdCons buffer;
@@ -33,14 +36,16 @@ public class TestProdCons extends Simulateur {
 	public TestProdCons(Observateur observateur) {
 
 		super(observateur);
-		consumer = new ArrayList<Consommateur>();
+		consumerList = new ArrayList<Consommateur>();
+		producerList = new ArrayList<Producteur>();
+
 		try {
 			init("options/options.xml");
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
 				| IOException e) {
 			e.getMessage();
 		}
-		buffer = new ProdCons(10);
+		buffer = new ProdCons(12);
 		nbMessageToProduceRandomVariable = new Aleatoire(nombreMoyenDeProduction, deviationNombreMoyenDeProduction);
 	}
 
@@ -49,13 +54,14 @@ public class TestProdCons extends Simulateur {
 		// Producer
 		for (int i = 0; i < nbProd; i++) {
 			int nbMessageToProduce = randomNumberOfMessageToProduce();
-			Producteur producer = new Producteur(tempsMoyenProduction, deviationTempsMoyenProduction,
+			Producteur newProducer = new Producteur(this, tempsMoyenProduction, deviationTempsMoyenProduction,
 					nbMessageToProduce, this.getBuffer());
-			producer.start();
+			producerList.add(newProducer);
+			newProducer.start();
 		}
 		// Consumer
 		for (int i = 0; i < nbCons; i++) {
-			Consommateur newConsumer = new Consommateur(tempsMoyenConsommation, deviationTempsMoyenConsommation,
+			Consommateur newConsumer = new Consommateur(this, tempsMoyenConsommation, deviationTempsMoyenConsommation,
 					this.getBuffer());
 			this.getConsumerList().add(newConsumer);
 			newConsumer.start();
@@ -66,8 +72,8 @@ public class TestProdCons extends Simulateur {
 		return this.buffer;
 	}
 
-	private ArrayList<Consommateur> getConsumerList() {
-		return consumer;
+	private List<Consommateur> getConsumerList() {
+		return consumerList;
 	}
 
 	private int randomNumberOfMessageToProduce() {
@@ -122,6 +128,15 @@ public class TestProdCons extends Simulateur {
 		// e.printStackTrace();
 		// }
 		// End(Test MessageX toString)
+	}
+
+	public void removeProducer(Producteur producteur) {
+		producerList.remove(producteur);
+
+	}
+
+	public boolean hasProducer() {
+		return !(producerList.isEmpty());
 	}
 
 }

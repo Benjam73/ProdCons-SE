@@ -11,24 +11,26 @@ public class Consommateur extends Acteur implements _Consommateur {
 	private ProdCons buffer;
 	private Aleatoire consumptionDurationRandomVariable;
 	private Integer alreadyConsume;
+	private TestProdCons simulator;
 
-	protected Consommateur(int moyenneTempsDeTraitement, int deviationTempsDeTraitement, ProdCons buffer)
-			throws ControlException {
+	protected Consommateur(TestProdCons simulator, int moyenneTempsDeTraitement, int deviationTempsDeTraitement,
+			ProdCons buffer) throws ControlException {
 
 		super(Type.typeConsommateur.getValue(), new Observateur(), moyenneTempsDeTraitement,
 				deviationTempsDeTraitement);
 		this.buffer = buffer;
 		consumptionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		alreadyConsume = 0;
+		this.simulator = simulator;
 	}
 
 	@Override
 	public void run() {
-		while (this.getBuffer().enAttente() != 0) {
+		while ((this.getBuffer().enAttente() != 0) || (simulator.hasProducer())) {
 			int timeToConsume = randomConsumptionDuration();
 			try {
 				sleep(timeToConsume);
-				this.getBuffer().get(this);
+				System.out.println(this.toString() + " received message " + this.getBuffer().get(this).toString());
 				newMessageConsume();
 			} catch (Exception e) {
 				e.getMessage();
