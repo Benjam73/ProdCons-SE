@@ -25,7 +25,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 	@Override
 	public void run() {
-		while (this.getBuffer().size() != 0) {
+		while (this.getBuffer().enAttente() != 0) {
 			int timeToConsume = randomConsumptionDuration();
 			try {
 				sleep(timeToConsume);

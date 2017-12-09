@@ -40,7 +40,7 @@ public class TestProdCons extends Simulateur {
 				| IOException e) {
 			e.getMessage();
 		}
-		buffer = new ProdCons();
+		buffer = new ProdCons(10);
 		nbMessageToProduceRandomVariable = new Aleatoire(nombreMoyenDeProduction, deviationNombreMoyenDeProduction);
 	}
 
