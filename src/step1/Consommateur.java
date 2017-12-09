@@ -3,7 +3,6 @@ package step1;
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
-import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons._Consommateur;
 
@@ -29,8 +28,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 			int timeToConsume = randomConsumptionDuration();
 			try {
 				sleep(timeToConsume);
-				Message messGet = this.getBuffer().get(this);
-				System.out.println(messGet);
+				this.getBuffer().get(this);
 				newMessageConsume();
 			} catch (Exception e) {
 				e.getMessage();
