@@ -3,6 +3,7 @@ package step1;
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
+import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons._Consommateur;
 
@@ -17,7 +18,6 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 		super(Type.typeConsommateur.getValue(), new Observateur(), moyenneTempsDeTraitement,
 				deviationTempsDeTraitement);
-		// TODO Auto-generated constructor stub
 		this.buffer = buffer;
 		consumptionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		alreadyConsume = 0;
@@ -25,21 +25,26 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		while (!(this.buffer.equals(null))) {
-			int timeTowait = consumptionDurationRandomVariable.next();
+		while (this.getBuffer().size() != 0) {
+			int timeToConsume = randomConsumptionDuration();
 			try {
-				sleep(timeTowait);
-				buffer.get(this);
-				alreadyConsume++;
+				sleep(timeToConsume);
+				Message messGet = this.getBuffer().get(this);
+				System.out.println(messGet);
+				newMessageConsume();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.getMessage();
 				e.printStackTrace();
 			}
-
 		}
+	}
 
+	private int randomConsumptionDuration() {
+		return consumptionDurationRandomVariable.next();
+	}
+
+	private void newMessageConsume() {
+		alreadyConsume++;
 	}
 
 	public String toString() {
@@ -49,6 +54,10 @@ public class Consommateur extends Acteur implements _Consommateur {
 	@Override
 	public int nombreDeMessages() {
 		return alreadyConsume;
+	}
+
+	private ProdCons getBuffer() {
+		return this.buffer;
 	}
 
 }

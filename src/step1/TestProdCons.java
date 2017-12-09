@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import jus.poc.prodcons.Aleatoire;
-import jus.poc.prodcons.ControlException;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons.Simulateur;
 
@@ -22,6 +21,7 @@ public class TestProdCons extends Simulateur {
 	private int deviationTempsMoyenConsommation;
 	private int nombreMoyenDeProduction;
 	private int deviationNombreMoyenDeProduction;
+	// Unused on V1
 	private int nombreMoyenNbExemplaire;
 	private int deviationNombreMoyenNbExemplaire;
 
@@ -33,7 +33,6 @@ public class TestProdCons extends Simulateur {
 	public TestProdCons(Observateur observateur) {
 
 		super(observateur);
-		// TODO Auto-generated constructor stub
 		consumer = new ArrayList<Consommateur>();
 		try {
 			init("options/options.xml");
@@ -48,23 +47,31 @@ public class TestProdCons extends Simulateur {
 	@Override
 	protected void run() throws Exception {
 		// Producer
-		if (nbProd > 0) {
-			for (int i = 0; i < nbProd; i++) {
-				int nbMessageToProduce = nbMessageToProduceRandomVariable.next();
-				Producteur producer = new Producteur(tempsMoyenProduction, deviationTempsMoyenProduction,
-						nbMessageToProduce, buffer);
-				producer.start();
-			}
-
+		for (int i = 0; i < nbProd; i++) {
+			int nbMessageToProduce = randomNumberOfMessageToProduce();
+			Producteur producer = new Producteur(tempsMoyenProduction, deviationTempsMoyenProduction,
+					nbMessageToProduce, this.getBuffer());
+			producer.start();
 		}
 		// Consumer
-		// TODO
 		for (int i = 0; i < nbCons; i++) {
 			Consommateur newConsumer = new Consommateur(tempsMoyenConsommation, deviationTempsMoyenConsommation,
-					buffer);
-			consumer.add(newConsumer);
+					this.getBuffer());
+			this.getConsumerList().add(newConsumer);
 			newConsumer.start();
 		}
+	}
+
+	private ProdCons getBuffer() {
+		return this.buffer;
+	}
+
+	private ArrayList<Consommateur> getConsumerList() {
+		return consumer;
+	}
+
+	private int randomNumberOfMessageToProduce() {
+		return nbMessageToProduceRandomVariable.next();
 	}
 
 	protected void init(String file) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException,
@@ -85,31 +92,35 @@ public class TestProdCons extends Simulateur {
 
 		TestProdCons myTest = new TestProdCons(new Observateur());
 		myTest.start();
-		try {
-			myTest.init(("options/" + "options.xml").toString());
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
-				| IOException e) {
-			e.getMessage();
-			e.printStackTrace();
-		}
-
-		// Test MessageX toString
-		int moyenneTempsDeTraitement = 10;
-		int deviationTempsDeTraitement = 1;
-		Producteur prod;
-		Consommateur cons;
-		try {
-			System.out.println("Creating messageX mess, hence adding producer to mess");
-			prod = new Producteur(moyenneTempsDeTraitement, deviationTempsDeTraitement, 3, myTest.buffer);
-			MessageX mess = new MessageX(prod);
-			System.out.println("Mess : " + mess.toString());
-			System.out.println("Adding consummer to mess");
-			cons = new Consommateur(moyenneTempsDeTraitement, deviationTempsDeTraitement, myTest.buffer);
-			mess.setMessageConsumer(cons);
-			System.out.println("Mess : " + mess.toString());
-		} catch (ControlException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// myTest.init(("options/" + "options.xml").toString());
+		// } catch (IllegalArgumentException | IllegalAccessException |
+		// NoSuchFieldException | SecurityException
+		// | IOException e) {
+		// e.getMessage();
+		// e.printStackTrace();
+		// }
+		//
+		// // Test MessageX toString
+		// int moyenneTempsDeTraitement = 10;
+		// int deviationTempsDeTraitement = 1;
+		// Producteur prod;
+		// Consommateur cons;
+		// try {
+		// System.out.println("Creating messageX mess, hence adding producer to
+		// mess");
+		// prod = new Producteur(moyenneTempsDeTraitement,
+		// deviationTempsDeTraitement, 3, myTest.buffer);
+		// MessageX mess = new MessageX(prod);
+		// System.out.println("Mess : " + mess.toString());
+		// System.out.println("Adding consummer to mess");
+		// cons = new Consommateur(moyenneTempsDeTraitement,
+		// deviationTempsDeTraitement, myTest.buffer);
+		// mess.setMessageConsumer(cons);
+		// System.out.println("Mess : " + mess.toString());
+		// } catch (ControlException e) {
+		// e.printStackTrace();
+		// }
 		// End(Test MessageX toString)
 	}
 

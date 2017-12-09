@@ -3,6 +3,7 @@ package step1;
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
+import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons._Producteur;
 
@@ -17,7 +18,6 @@ public class Producteur extends Acteur implements _Producteur {
 	protected Producteur(int moyenneTempsDeTraitement, int deviationTempsDeTraitement, int nbMessageToProduce,
 			ProdCons buffer) throws ControlException {
 		super(Type.typeProducteur.getValue(), new Observateur(), moyenneTempsDeTraitement, deviationTempsDeTraitement);
-		// TODO Auto-generated constructor stub
 		this.nbMessageToProduce = nbMessageToProduce;
 		this.buffer = buffer;
 		productionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
@@ -27,19 +27,25 @@ public class Producteur extends Acteur implements _Producteur {
 
 	@Override
 	public void run() {
-		// Put n in buffer
 		while (alreadyProduced < nbMessageToProduce) {
-			MessageX newMessage = new MessageX(this);
-			int timeToWait = productionDurationRandomVariable.next();
+			Message newMessage = new MessageX(this);
+			int timeToProduce = randomProductionDuration();
 			try {
-				sleep(timeToWait);
-				this.buffer.put(this, newMessage);
-				alreadyProduced++;
+				sleep(timeToProduce);
+				this.getBuffer().put(this, newMessage);
+				oneNewMessageCreated();
 			} catch (Exception e) {
 				e.getMessage();
 			}
 		}
+	}
 
+	private void oneNewMessageCreated() {
+		alreadyProduced++;
+	}
+
+	private int randomProductionDuration() {
+		return productionDurationRandomVariable.next();
 	}
 
 	@Override
@@ -57,6 +63,10 @@ public class Producteur extends Acteur implements _Producteur {
 	@Override
 	public String toString() {
 		return "[Producteur " + this.identification() + "]";
+	}
+
+	private ProdCons getBuffer() {
+		return this.buffer;
 	}
 
 }
