@@ -1,4 +1,4 @@
-package step1;
+package step2;
 
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
