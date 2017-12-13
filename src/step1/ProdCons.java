@@ -29,6 +29,7 @@ public class ProdCons implements Tampon {
 		while (!(enAttente() > 0)) {
 			wait();
 		}
+		System.out.println("get with enAttente = " + enAttente());
 		Message resultingMessage = queue.poll();
 		if (resultingMessage == null) {
 			throw new Exception("Couldn't poll message");
@@ -42,6 +43,7 @@ public class ProdCons implements Tampon {
 		while (!(enAttente() < taille())) {
 			wait();
 		}
+		System.out.println("put with remaining capacity = " + (taille() - enAttente()));
 		queue.add(arg1);
 		notifyAll();
 	}
