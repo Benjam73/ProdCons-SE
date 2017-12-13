@@ -36,7 +36,7 @@ int main(int argc, char const *argv[])
             strcat(currentString, argv[i + 1]);
             strcat(currentString, "</entry>\n");
         }
-        strcat(currentString, "</properties>%");
+        strcat(currentString, "</properties>");
         fprintf(file, "%s\n", currentString);
         fclose(file);
         return 0;
