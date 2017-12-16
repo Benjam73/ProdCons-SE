@@ -13,15 +13,17 @@ public class Consommateur extends Acteur implements _Consommateur {
 	private Aleatoire consumptionDurationRandomVariable;
 	private Integer alreadyConsumed;
 	private TestProdCons simulator;
+	MyObserver myObserver;
 
 	protected Consommateur(TestProdCons simulator, Observateur observateur, int moyenneTempsDeTraitement,
-			int deviationTempsDeTraitement, ProdCons buffer) throws ControlException {
+			int deviationTempsDeTraitement, ProdCons buffer, MyObserver myObserver) throws ControlException {
 
 		super(typeConsommateur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		this.buffer = buffer;
 		consumptionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		alreadyConsumed = 0;
 		this.simulator = simulator;
+		this.myObserver = myObserver;
 	}
 
 	@Override
@@ -32,8 +34,14 @@ public class Consommateur extends Acteur implements _Consommateur {
 				Message removedMessage = this.getBuffer().get(this);
 				System.out.println(this.toString() + " received message " + removedMessage.toString());
 				observateur.retraitMessage(this, removedMessage);
-				sleep(timeToConsume);
+				myObserver.messageRemoved(this, removedMessage);
+				try {
+					sleep(timeToConsume);
+				} catch (InterruptedException e) {
+					currentThread().interrupt();
+				}
 				observateur.consommationMessage(this, removedMessage, timeToConsume);
+				myObserver.messageConsumption(this, removedMessage, timeToConsume);
 				newMessageConsumed();
 			} catch (Exception e) {
 				e.getMessage();

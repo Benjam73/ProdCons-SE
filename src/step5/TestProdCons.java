@@ -24,7 +24,7 @@ public class TestProdCons extends Simulateur {
 	private int deviationTempsMoyenConsommation;
 	private int nombreMoyenDeProduction;
 	private int deviationNombreMoyenDeProduction;
-	// Unused on V1
+	// Unused on step5
 	private int nombreMoyenNbExemplaire;
 	private int deviationNombreMoyenNbExemplaire;
 
@@ -84,13 +84,12 @@ public class TestProdCons extends Simulateur {
 			currentProducer.join();
 		}
 
-		System.out.println("All the producing is done");
 		/* wait for consommateur termination */
 		while (buffer.enAttente() > 0) {
 			Thread.yield();
 		}
 
-		/* Interruption of infinite loop of consommateur */
+		/* Interruption of sleeping consommateur */
 		for (Iterator<Consommateur> iterator = consumerThreadList.iterator(); iterator.hasNext();) {
 
 			Consommateur currentConsumer = iterator.next();
