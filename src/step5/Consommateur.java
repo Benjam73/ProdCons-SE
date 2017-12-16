@@ -30,16 +30,16 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 			int timeToConsume = randomConsumptionDuration();
 			try {
-				Message removedMessage = this.getBuffer().get(this);
-				System.out.println(this.toString() + " received message " + removedMessage.toString());
-				observateur.retraitMessage(this, removedMessage);
 				try {
+					Message removedMessage = this.getBuffer().get(this);
+					System.out.println(this.toString() + " received message " + removedMessage.toString());
+					observateur.retraitMessage(this, removedMessage);
 					sleep(timeToConsume);
+					observateur.consommationMessage(this, removedMessage, timeToConsume);
+					newMessageConsumed();
 				} catch (InterruptedException e) {
 					currentThread().interrupt();
 				}
-				observateur.consommationMessage(this, removedMessage, timeToConsume);
-				newMessageConsumed();
 			} catch (Exception e) {
 				e.getMessage();
 				e.printStackTrace();
