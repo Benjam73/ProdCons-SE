@@ -5,8 +5,8 @@
 	<comment>
 		Cette configuration ...
 	</comment>
-	<entry key="nbProd">2</entry>
-	<entry key="nbCons">5</entry>
+	<entry key="nbProd">7</entry>
+	<entry key="nbCons">15</entry>
 	<entry key="nbBuffer">5</entry>
 	<entry key="tempsMoyenProduction">10</entry>
 	<entry key="deviationTempsMoyenProduction">1</entry>
