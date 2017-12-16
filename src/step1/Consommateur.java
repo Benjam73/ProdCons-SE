@@ -1,5 +1,6 @@
 package step1;
 
+import common.Debugger;
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
@@ -16,8 +17,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 	protected Consommateur(TestProdCons simulator, int moyenneTempsDeTraitement, int deviationTempsDeTraitement,
 			ProdCons buffer) throws ControlException {
 
-		super(Type.typeConsommateur.getValue(), new Observateur(), moyenneTempsDeTraitement,
-				deviationTempsDeTraitement);
+		super(typeConsommateur, new Observateur(), moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		this.buffer = buffer;
 		consumptionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		alreadyConsumed = 0;
