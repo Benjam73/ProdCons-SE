@@ -3,6 +3,7 @@ package step3;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -23,7 +24,7 @@ public class TestProdCons extends Simulateur {
 	private int deviationTempsMoyenConsommation;
 	private int nombreMoyenDeProduction;
 	private int deviationNombreMoyenDeProduction;
-	// Unused on V1
+	// Unused on step3
 	private int nombreMoyenNbExemplaire;
 	private int deviationNombreMoyenNbExemplaire;
 
@@ -34,11 +35,17 @@ public class TestProdCons extends Simulateur {
 
 	private ProdCons buffer;
 
+	private List<Consommateur> consumerThreadList;
+	private List<Producteur> producerThreadList;
+
 	public TestProdCons(Observateur observateur) {
 
 		super(observateur);
 		consumerList = new ArrayList<Consommateur>();
 		producerList = new ArrayList<Producteur>();
+
+		producerThreadList = new ArrayList<Producteur>();
+		consumerThreadList = new ArrayList<Consommateur>();
 
 		try {
 			init("options/options.xml");
@@ -47,7 +54,7 @@ public class TestProdCons extends Simulateur {
 				| IOException | ControlException e) {
 			e.getMessage();
 		}
-		buffer = new ProdCons(12);
+		buffer = new ProdCons(nbBuffer);
 		nbMessageToProduceRandomVariable = new Aleatoire(nombreMoyenDeProduction, deviationNombreMoyenDeProduction);
 	}
 
@@ -70,6 +77,27 @@ public class TestProdCons extends Simulateur {
 			this.getConsumerList().add(newConsumer);
 			newConsumer.start();
 		}
+
+		for (Iterator<Producteur> iterator = producerThreadList.iterator(); iterator.hasNext();) {
+			Producteur currentProducer = iterator.next();
+			currentProducer.join();
+		}
+
+		/* wait for consommateur termination */
+		while (buffer.enAttente() > 0) {
+			Thread.yield();
+		}
+
+		/* Interruption of sleeping consommateur */
+		for (Iterator<Consommateur> iterator = consumerThreadList.iterator(); iterator.hasNext();) {
+
+			Consommateur currentConsumer = iterator.next();
+			currentConsumer.interrupt();
+			currentConsumer.join();
+
+		}
+
+		System.out.println("Verification by Observateur : " + (observateur.coherent() ? "OK" : "NOK"));
 	}
 
 	private ProdCons getBuffer() {
