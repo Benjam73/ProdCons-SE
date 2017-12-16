@@ -67,9 +67,35 @@ public class TestProdCons extends Simulateur {
 			Consommateur newConsumer = new Consommateur(this, observateur, tempsMoyenConsommation,
 					deviationTempsMoyenConsommation, this.getBuffer());
 			observateur.newConsommateur(newConsumer);
-			this.getConsumerList().add(newConsumer);
+			consumerList.add(newConsumer);
 			newConsumer.start();
 		}
+
+		// FIXME : comprends pas
+		// if (producerList.size() != 0) {
+		// for (Iterator<Producteur> iterator = producerList.iterator();
+		// iterator.hasNext();) {
+		// Producteur p = iterator.next();
+		// p.join();
+		// }
+		// }
+		//
+		// System.out.println("All the producing is done");
+		// /* wait for consommateur termination */
+		// while (buffer.enAttente() > 0) {
+		// Thread.yield();
+		// }
+		//
+		// /* Interruption of infinite loop of consommateur */
+		// for (Iterator<Consommateur> iterator = consumerList.iterator();
+		// iterator.hasNext();) {
+		// Consommateur c = iterator.next();
+		// c.interrupt();
+		// c.join();
+		// }
+		//
+		// System.out.println("Verification by Observateur : " +
+		// (observateur.coherent() ? "OK" : "NOK"));
 	}
 
 	private ProdCons getBuffer() {

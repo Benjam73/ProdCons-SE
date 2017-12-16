@@ -2,7 +2,9 @@ package step5;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Tampon;
@@ -14,49 +16,69 @@ public class ProdCons implements Tampon {
 	Integer capacity;
 	Queue<Message> queue;
 
-	Semaphore fifoProducer;
-	Semaphore fifoConsumer;
-	Semaphore mutex;
+	// Semaphore fifoProducer;
+	// Semaphore fifoConsumer;
+	// Semaphore mutex;
+	Lock lock;
+	Condition bufferNotFull;
+	Condition bufferNotEmpty;
 
 	public ProdCons(Integer capacity) {
 		super();
 		this.capacity = capacity;
 		this.queue = new LinkedList<Message>();
-		fifoProducer = new Semaphore(capacity, true);
-		fifoConsumer = new Semaphore(0, true);
-		mutex = new Semaphore(1, true);
+		// fifoProducer = new Semaphore(capacity, true);
+		// fifoConsumer = new Semaphore(0, true);
+		// mutex = new Semaphore(1, true);
+		lock = new ReentrantLock();
+		bufferNotEmpty = lock.newCondition();
+		bufferNotFull = lock.newCondition();
 	}
 
 	@Override
 	public int enAttente() {
-		return queue.size();
+		try {
+			lock.lock();
+			return queue.size();
+		} finally {
+			lock.unlock();
+		}
+
 	}
 
 	@Override
 	public Message get(_Consommateur arg0) throws Exception, InterruptedException {
-		Message resultingMessage;
-		fifoConsumer.acquire();
-		mutex.acquire();
+		lock.lock();
+		try {
+			Message resultingMessage;
+			while (enAttente() == 0) {
+				bufferNotEmpty.await();
+			}
+			resultingMessage = queue.poll();
+			if (resultingMessage == null) {
+				throw new Exception("Couldn't poll message");
+			}
 
-		resultingMessage = queue.poll();
-		if (resultingMessage == null) {
-			throw new Exception("Couldn't poll message");
+			bufferNotFull.signal();
+			return resultingMessage;
+		} finally {
+			lock.unlock();
 		}
-
-		mutex.release();
-		fifoProducer.release();
-		return resultingMessage;
 	}
 
 	@Override
 	public void put(_Producteur arg0, Message arg1) throws Exception, InterruptedException {
-		fifoProducer.acquire();
-		mutex.acquire();
+		lock.lock();
+		try {
+			while (enAttente() == taille()) {
+				bufferNotFull.await();
+			}
+			queue.add(arg1);
+			bufferNotEmpty.signal();
+		} finally {
+			lock.unlock();
+		}
 
-		queue.add(arg1);
-
-		mutex.release();
-		fifoConsumer.release();
 	}
 
 	@Override
