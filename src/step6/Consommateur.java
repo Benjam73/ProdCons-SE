@@ -35,7 +35,11 @@ public class Consommateur extends Acteur implements _Consommateur {
 				System.out.println(this.toString() + " received message " + removedMessage.toString());
 				observateur.retraitMessage(this, removedMessage);
 				myObserver.messageRemoved(this, removedMessage);
-				sleep(timeToConsume);
+				try {
+					sleep(timeToConsume);
+				} catch (InterruptedException e) {
+					currentThread().interrupt();
+				}
 				observateur.consommationMessage(this, removedMessage, timeToConsume);
 				myObserver.messageConsumption(this, removedMessage, timeToConsume);
 				newMessageConsumed();
