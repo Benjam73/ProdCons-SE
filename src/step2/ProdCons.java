@@ -8,7 +8,6 @@ import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Tampon;
 import jus.poc.prodcons._Consommateur;
 import jus.poc.prodcons._Producteur;
-import step1.MessageX;
 
 public class ProdCons implements Tampon {
 
