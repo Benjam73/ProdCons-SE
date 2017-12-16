@@ -40,6 +40,7 @@ public class Producteur extends Acteur implements _Producteur {
 			}
 		}
 		simulator.removeProducer(this);
+		System.out.println(this.toString() + " dies");
 	}
 
 	private void oneNewMessageCreated() {
@@ -52,10 +53,7 @@ public class Producteur extends Acteur implements _Producteur {
 
 	@Override
 	public int nombreDeMessages() {
-
-		// TODO Auto-generated method stub
-
-		return 0;
+		return nbMessageToProduce;
 	}
 
 	public Integer alreadyProduced() {

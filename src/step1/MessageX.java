@@ -4,6 +4,8 @@ import jus.poc.prodcons.Message;
 
 public class MessageX implements Message {
 
+	// null if messageX ain't in buffer yet, its global buffer order rank
+	// otherwise
 	private Integer messageXNumber = null;
 
 	// MessageX is the productionNumber-th produced by messageProducer
@@ -61,6 +63,10 @@ public class MessageX implements Message {
 		this.consumptionNumber = consumptionNumber;
 	}
 
+	public void setId(Integer msgNumber) {
+		messageXNumber = msgNumber;
+	}
+
 	// Getters
 	public Producteur getMessageProducer() {
 		return messageProducer;
@@ -76,9 +82,5 @@ public class MessageX implements Message {
 
 	public Integer getConsumptionNumber() {
 		return consumptionNumber;
-	}
-
-	public void setId(Integer msgNumber) {
-		messageXNumber = msgNumber;
 	}
 }

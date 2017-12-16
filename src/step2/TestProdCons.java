@@ -51,12 +51,16 @@ public class TestProdCons extends Simulateur {
 
 	@Override
 	protected void run() throws Exception {
+		System.out.println("Number of producers : " + nbProd);
+		System.out.println("Number of consumers : " + nbCons);
 		// Producer
 		for (int i = 0; i < nbProd; i++) {
 			int nbMessageToProduce = randomNumberOfMessageToProduce();
 			Producteur newProducer = new Producteur(this, tempsMoyenProduction, deviationTempsMoyenProduction,
 					nbMessageToProduce, this.getBuffer());
 			producerList.add(newProducer);
+			System.out.println(
+					newProducer.toString() + " will produce " + newProducer.nombreDeMessages() + " messages. ");
 			newProducer.start();
 		}
 		// Consumer
@@ -95,39 +99,8 @@ public class TestProdCons extends Simulateur {
 	}
 
 	public static void main(String[] args) {
-
 		TestProdCons myTest = new TestProdCons(new Observateur());
 		myTest.start();
-		// try {
-		// myTest.init(("options/" + "options.xml").toString());
-		// } catch (IllegalArgumentException | IllegalAccessException |
-		// NoSuchFieldException | SecurityException
-		// | IOException e) {
-		// e.getMessage();
-		// e.printStackTrace();
-		// }
-		//
-		// // Test MessageX toString
-		// int moyenneTempsDeTraitement = 10;
-		// int deviationTempsDeTraitement = 1;
-		// Producteur prod;
-		// Consommateur cons;
-		// try {
-		// System.out.println("Creating messageX mess, hence adding producer to
-		// mess");
-		// prod = new Producteur(moyenneTempsDeTraitement,
-		// deviationTempsDeTraitement, 3, myTest.buffer);
-		// MessageX mess = new MessageX(prod);
-		// System.out.println("Mess : " + mess.toString());
-		// System.out.println("Adding consummer to mess");
-		// cons = new Consommateur(moyenneTempsDeTraitement,
-		// deviationTempsDeTraitement, myTest.buffer);
-		// mess.setMessageConsumer(cons);
-		// System.out.println("Mess : " + mess.toString());
-		// } catch (ControlException e) {
-		// e.printStackTrace();
-		// }
-		// End(Test MessageX toString)
 	}
 
 	public void removeProducer(Producteur producteur) {

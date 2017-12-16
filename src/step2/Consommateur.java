@@ -37,6 +37,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 				e.printStackTrace();
 			}
 		}
+		System.out.println(this.toString() + " dies");
 	}
 
 	private int randomConsumptionDuration() {
