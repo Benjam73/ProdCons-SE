@@ -51,16 +51,15 @@ public class TestProdCons extends Simulateur {
 
 	@Override
 	protected void run() throws Exception {
-		System.out.println("Number of producers : " + nbProd);
-		System.out.println("Number of consumers : " + nbCons);
+		Debugger.log("Number of producers : " + nbProd);
+		Debugger.log("Number of consumers : " + nbCons);
 		// Producer
 		for (int i = 0; i < nbProd; i++) {
 			int nbMessageToProduce = randomNumberOfMessageToProduce();
 			Producteur newProducer = new Producteur(this, tempsMoyenProduction, deviationTempsMoyenProduction,
 					nbMessageToProduce, this.getBuffer());
 			producerList.add(newProducer);
-			System.out.println(
-					newProducer.toString() + " will produce " + newProducer.nombreDeMessages() + " messages. ");
+			Debugger.log(newProducer.toString() + " will produce " + newProducer.nombreDeMessages() + " messages. ");
 			newProducer.start();
 		}
 		// Consumer

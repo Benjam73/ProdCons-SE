@@ -29,7 +29,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 		while ((this.getBuffer().enAttente() != 0) || (simulator.hasProducer())) {
 			int timeToConsume = randomConsumptionDuration();
 			try {
-				System.out.println(this.toString() + " received message " + this.getBuffer().get(this).toString());
+				Debugger.log(this.toString() + " received message " + this.getBuffer().get(this).toString());
 				sleep(timeToConsume);
 				newMessageConsumed();
 			} catch (Exception e) {
@@ -37,7 +37,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(this.toString() + " dies");
+		Debugger.log(this.toString() + " dies");
 	}
 
 	private int randomConsumptionDuration() {
