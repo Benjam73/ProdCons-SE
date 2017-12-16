@@ -1,4 +1,4 @@
-package common;
+package step1;
 
 public class Debugger {
 
