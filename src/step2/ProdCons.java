@@ -48,7 +48,7 @@ public class ProdCons implements Tampon {
 		if (resultingMessage == null) {
 			throw new Exception("Couldn't poll message");
 		}
-		System.out.println("get by " + arg0.toString() + " of " + resultingMessage.toString() + " with " + enAttente()
+		Debugger.log("get by " + arg0.toString() + " of " + resultingMessage.toString() + " with " + enAttente()
 				+ " messages remaining in buffer");
 		mutex.release();
 		fifoProducer.release();
@@ -61,7 +61,7 @@ public class ProdCons implements Tampon {
 		mutex.acquire();
 
 		setMessageId((MessageX) arg1);
-		System.out.println("put by " + arg0.toString() + " of " + arg1.toString() + " with remaining capacity = "
+		Debugger.log("put by " + arg0.toString() + " of " + arg1.toString() + " with remaining capacity = "
 				+ (taille() - enAttente()));
 		queue.add(arg1);
 

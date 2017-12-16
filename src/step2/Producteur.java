@@ -40,7 +40,7 @@ public class Producteur extends Acteur implements _Producteur {
 			}
 		}
 		simulator.removeProducer(this);
-		System.out.println(this.toString() + " dies");
+		Debugger.log(this.toString() + " dies");
 	}
 
 	private void oneNewMessageCreated() {
