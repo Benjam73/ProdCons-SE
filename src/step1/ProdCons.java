@@ -12,6 +12,7 @@ public class ProdCons implements Tampon {
 
 	Integer capacity;
 	Queue<Message> queue;
+	private int msgNumber = 0;
 
 	public ProdCons(Integer capacity) {
 		super();
@@ -24,16 +25,23 @@ public class ProdCons implements Tampon {
 		return queue.size();
 	}
 
+	public void setMessageId(MessageX msg) {
+		msg.setId(msgNumber);
+		msgNumber++;
+	}
+
 	@Override
 	public synchronized Message get(_Consommateur arg0) throws Exception, InterruptedException {
 		while (!(enAttente() > 0)) {
+			System.out.println(arg0.toString() + " waits");
 			wait();
 		}
-		System.out.println("get with enAttente = " + enAttente());
 		Message resultingMessage = queue.poll();
 		if (resultingMessage == null) {
 			throw new Exception("Couldn't poll message");
 		}
+		System.out.println("get by " + arg0.toString() + " of " + resultingMessage.toString() + " with " + enAttente()
+				+ " messages remaining in buffer");
 		notifyAll();
 		return resultingMessage;
 	}
@@ -41,9 +49,12 @@ public class ProdCons implements Tampon {
 	@Override
 	public synchronized void put(_Producteur arg0, Message arg1) throws Exception, InterruptedException {
 		while (!(enAttente() < taille())) {
+			System.out.println(arg0.toString() + " waits");
 			wait();
 		}
-		System.out.println("put with remaining capacity = " + (taille() - enAttente()));
+		setMessageId((MessageX) arg1);
+		System.out.println("put by " + arg0.toString() + " of " + arg1.toString() + " with remaining capacity = "
+				+ (taille() - enAttente()));
 		queue.add(arg1);
 		notifyAll();
 	}

@@ -4,7 +4,7 @@ import jus.poc.prodcons.Message;
 
 public class MessageX implements Message {
 
-	private static Integer totalNumberOfMessages = 0;
+	private Integer messageXNumber = null;
 
 	// MessageX is the productionNumber-th produced by messageProducer
 	private Producteur messageProducer;
@@ -21,15 +21,21 @@ public class MessageX implements Message {
 		super();
 		this.messageProducer = messageProducer;
 		this.productionNumber = messageProducer.getAlreadyProduced();
-		this.id = "[" + totalNumberOfMessages.toString() + ", " + messageProducer.identification() + ", "
-				+ getProductionNumber() + "]";
+		this.id = "[" + messageProducer.identification() + ", " + getProductionNumber() + "]";
+
 		this.messageConsumer = null;
 		this.consumptionNumber = null;
-		totalNumberOfMessages++;
 	}
 
 	public String toString() {
-		return id;
+		String res;
+		if (messageXNumber != null) {
+			res = "[" + messageXNumber.toString() + ", " + messageProducer.identification() + ", "
+					+ getProductionNumber() + "]";
+		} else {
+			res = id;
+		}
+		return res;
 	}
 
 	public String history() {
@@ -70,5 +76,9 @@ public class MessageX implements Message {
 
 	public Integer getConsumptionNumber() {
 		return consumptionNumber;
+	}
+
+	public void setId(Integer msgNumber) {
+		messageXNumber = msgNumber;
 	}
 }
