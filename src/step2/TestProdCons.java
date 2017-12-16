@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import common.Debugger;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons.Simulateur;
