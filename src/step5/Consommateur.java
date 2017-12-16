@@ -11,7 +11,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 	private ProdCons buffer;
 	private Aleatoire consumptionDurationRandomVariable;
-	private Integer alreadyConsume;
+	private Integer alreadyConsumed;
 	private TestProdCons simulator;
 
 	protected Consommateur(TestProdCons simulator, Observateur observateur, int moyenneTempsDeTraitement,
@@ -20,7 +20,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 		super(typeConsommateur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		this.buffer = buffer;
 		consumptionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
-		alreadyConsume = 0;
+		alreadyConsumed = 0;
 		this.simulator = simulator;
 	}
 
@@ -35,7 +35,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 				observateur.retraitMessage(this, removedMessage);
 				sleep(timeToConsume);
 				observateur.consommationMessage(this, removedMessage, timeToConsume);
-				newMessageConsume();
+				newMessageConsumed();
 			} catch (Exception e) {
 				e.getMessage();
 				e.printStackTrace();
@@ -47,8 +47,8 @@ public class Consommateur extends Acteur implements _Consommateur {
 		return consumptionDurationRandomVariable.next();
 	}
 
-	private void newMessageConsume() {
-		alreadyConsume++;
+	private void newMessageConsumed() {
+		alreadyConsumed++;
 	}
 
 	public String toString() {
@@ -57,7 +57,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 	@Override
 	public int nombreDeMessages() {
-		return alreadyConsume;
+		return alreadyConsumed;
 	}
 
 	private ProdCons getBuffer() {
