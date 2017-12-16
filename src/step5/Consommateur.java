@@ -1,8 +1,9 @@
-package step1;
+package step5;
 
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
+import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons._Consommateur;
 
@@ -10,42 +11,44 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 	private ProdCons buffer;
 	private Aleatoire consumptionDurationRandomVariable;
-	private Integer alreadyConsumed;
+	private Integer alreadyConsume;
 	private TestProdCons simulator;
 
-	protected Consommateur(TestProdCons simulator, int moyenneTempsDeTraitement, int deviationTempsDeTraitement,
-			ProdCons buffer) throws ControlException {
+	protected Consommateur(TestProdCons simulator, Observateur observateur, int moyenneTempsDeTraitement,
+			int deviationTempsDeTraitement, ProdCons buffer) throws ControlException {
 
-		super(Type.typeConsommateur.getValue(), new Observateur(), moyenneTempsDeTraitement,
-				deviationTempsDeTraitement);
+		super(typeConsommateur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		this.buffer = buffer;
 		consumptionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
-		alreadyConsumed = 0;
+		alreadyConsume = 0;
 		this.simulator = simulator;
 	}
 
 	@Override
 	public void run() {
 		while ((this.getBuffer().enAttente() != 0) || (simulator.hasProducer())) {
+
 			int timeToConsume = randomConsumptionDuration();
 			try {
-				System.out.println(this.toString() + " received message " + this.getBuffer().get(this).toString());
+				Message removedMessage = this.getBuffer().get(this);
+				System.out.println(this.toString() + " received message " + removedMessage.toString());
+				observateur.retraitMessage(this, removedMessage);
 				sleep(timeToConsume);
-				newMessageConsumed();
+				observateur.consommationMessage(this, removedMessage, timeToConsume);
+				newMessageConsume();
 			} catch (Exception e) {
 				e.getMessage();
 				e.printStackTrace();
 			}
 		}
-		System.out.println(this.toString() + " dies");
 	}
 
 	private int randomConsumptionDuration() {
 		return consumptionDurationRandomVariable.next();
 	}
 
-	private void newMessageConsumed() {
-		alreadyConsumed++;
+	private void newMessageConsume() {
+		alreadyConsume++;
 	}
 
 	public String toString() {
@@ -54,7 +57,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 	@Override
 	public int nombreDeMessages() {
-		return alreadyConsumed;
+		return alreadyConsume;
 	}
 
 	private ProdCons getBuffer() {

@@ -1,4 +1,4 @@
-package step1;
+package step2;
 
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
@@ -10,7 +10,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 	private ProdCons buffer;
 	private Aleatoire consumptionDurationRandomVariable;
-	private Integer alreadyConsumed;
+	private Integer alreadyConsume;
 	private TestProdCons simulator;
 
 	protected Consommateur(TestProdCons simulator, int moyenneTempsDeTraitement, int deviationTempsDeTraitement,
@@ -20,7 +20,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 				deviationTempsDeTraitement);
 		this.buffer = buffer;
 		consumptionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
-		alreadyConsumed = 0;
+		alreadyConsume = 0;
 		this.simulator = simulator;
 	}
 
@@ -31,21 +31,20 @@ public class Consommateur extends Acteur implements _Consommateur {
 			try {
 				System.out.println(this.toString() + " received message " + this.getBuffer().get(this).toString());
 				sleep(timeToConsume);
-				newMessageConsumed();
+				newMessageConsume();
 			} catch (Exception e) {
 				e.getMessage();
 				e.printStackTrace();
 			}
 		}
-		System.out.println(this.toString() + " dies");
 	}
 
 	private int randomConsumptionDuration() {
 		return consumptionDurationRandomVariable.next();
 	}
 
-	private void newMessageConsumed() {
-		alreadyConsumed++;
+	private void newMessageConsume() {
+		alreadyConsume++;
 	}
 
 	public String toString() {
@@ -54,7 +53,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 
 	@Override
 	public int nombreDeMessages() {
-		return alreadyConsumed;
+		return alreadyConsume;
 	}
 
 	private ProdCons getBuffer() {
