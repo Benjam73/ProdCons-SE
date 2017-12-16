@@ -1,4 +1,4 @@
-package step4;
+package step5;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -38,22 +38,13 @@ public class ProdCons implements Tampon {
 		fifoConsumer.acquire();
 		mutex.acquire();
 
-		if (((MessageX) queue.element()).getCopyNumber() == 1) {
-			resultingMessage = queue.poll();
-			((MessageX) resultingMessage).getMessageProducer().getSemaphore().release();
-			fifoProducer.release();
-
-		} else {
-			resultingMessage = queue.element();
-			((MessageX) queue.element()).decreaseCopynumber();
-		}
-
+		resultingMessage = queue.poll();
 		if (resultingMessage == null) {
 			throw new Exception("Couldn't poll message");
 		}
 
 		mutex.release();
-
+		fifoProducer.release();
 		return resultingMessage;
 	}
 
@@ -62,15 +53,10 @@ public class ProdCons implements Tampon {
 		fifoProducer.acquire();
 		mutex.acquire();
 
-		try {
-			queue.add(arg1);
-
-		} catch (Exception e) {
-			e.getMessage();
-		}
+		queue.add(arg1);
 
 		mutex.release();
-		fifoConsumer.release(((MessageX) arg1).getCopyNumber());
+		fifoConsumer.release();
 	}
 
 	@Override

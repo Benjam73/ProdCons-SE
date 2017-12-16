@@ -1,6 +1,4 @@
-package step4;
-
-import java.util.concurrent.Semaphore;
+package step5;
 
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
@@ -17,40 +15,31 @@ public class Producteur extends Acteur implements _Producteur {
 	private ProdCons buffer;
 	private Aleatoire productionDurationRandomVariable;
 	private TestProdCons simulator;
-	private Aleatoire copyOfEachMessageRandomVariable;
-	private Semaphore semProd;
 
 	protected Producteur(TestProdCons simulator, Observateur observateur, int moyenneTempsDeTraitement,
-			int deviationTempsDeTraitement, int nbMessageToProduce, ProdCons buffer,
-			Aleatoire copyOfEachMessageRandomVariable) throws ControlException {
+			int deviationTempsDeTraitement, int nbMessageToProduce, ProdCons buffer) throws ControlException {
 		super(typeProducteur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		this.nbMessageToProduce = nbMessageToProduce;
 		this.buffer = buffer;
 		productionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		alreadyProduced = 0;
 		this.simulator = simulator;
-		this.copyOfEachMessageRandomVariable = copyOfEachMessageRandomVariable;
-		semProd = new Semaphore(1, true);
 	}
 
 	@Override
 	public void run() {
 		while (alreadyProduced < nbMessageToProduce) {
-			int copyOfNewMessage = copyOfEachMessageRandomVariable.next();
-			Message newMessage = new MessageX(this, copyOfNewMessage);
-
+			Message newMessage = new MessageX(this);
 			int timeToProduce = randomProductionDuration();
 			try {
-				semProd.acquire();
 				observateur.productionMessage(this, newMessage, timeToProduce);
-				sleep(copyOfNewMessage * timeToProduce);
+				sleep(timeToProduce);
 				this.getBuffer().put(this, newMessage);
 				observateur.depotMessage(this, newMessage);
 				oneNewMessageCreated();
 			} catch (Exception e) {
 				e.getMessage();
 			}
-
 		}
 		simulator.removeProducer(this);
 	}
@@ -82,10 +71,6 @@ public class Producteur extends Acteur implements _Producteur {
 
 	private ProdCons getBuffer() {
 		return this.buffer;
-	}
-
-	public Semaphore getSemaphore() {
-		return semProd;
 	}
 
 }
