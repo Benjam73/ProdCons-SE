@@ -18,6 +18,8 @@ public class ProdCons implements Tampon {
 	Semaphore fifoConsumer;
 	Semaphore mutex;
 
+	private int msgNumber = 0;
+
 	public ProdCons(Integer capacity) {
 		super();
 		this.capacity = capacity;
@@ -32,6 +34,11 @@ public class ProdCons implements Tampon {
 		return queue.size();
 	}
 
+	public void setMessageId(MessageX msg) {
+		msg.setId(msgNumber);
+		msgNumber++;
+	}
+
 	@Override
 	public Message get(_Consommateur arg0) throws Exception, InterruptedException {
 		Message resultingMessage;
@@ -42,7 +49,8 @@ public class ProdCons implements Tampon {
 		if (resultingMessage == null) {
 			throw new Exception("Couldn't poll message");
 		}
-
+		Debugger.log("get by " + arg0.toString() + " of " + resultingMessage.toString() + " with " + enAttente()
+				+ " messages remaining in buffer");
 		mutex.release();
 		fifoProducer.release();
 		return resultingMessage;
@@ -52,9 +60,10 @@ public class ProdCons implements Tampon {
 	public void put(_Producteur arg0, Message arg1) throws Exception, InterruptedException {
 		fifoProducer.acquire();
 		mutex.acquire();
-
+		setMessageId((MessageX) arg1);
 		queue.add(arg1);
-
+		Debugger.log("put by " + arg0.toString() + " of " + arg1.toString() + " with remaining capacity = "
+				+ (taille() - enAttente()));
 		mutex.release();
 		fifoConsumer.release();
 	}

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import common.Debugger;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
 import jus.poc.prodcons.Observateur;
@@ -48,7 +49,7 @@ public class TestProdCons extends Simulateur {
 		consumerThreadList = new ArrayList<Consommateur>();
 
 		try {
-			init("options/options.xml");
+			init("options/test6.xml");
 			observateur.init(nbProd, nbCons, nbBuffer);
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
 				| IOException | ControlException e) {
@@ -97,7 +98,7 @@ public class TestProdCons extends Simulateur {
 
 		}
 
-		System.out.println("Verification by Observateur : " + (observateur.coherent() ? "OK" : "NOK"));
+		Debugger.log("Verification by Observateur : " + (observateur.coherent() ? "OK" : "NOK"));
 	}
 
 	private ProdCons getBuffer() {

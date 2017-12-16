@@ -40,7 +40,7 @@ public class TestProdCons extends Simulateur {
 		producerList = new ArrayList<Producteur>();
 
 		try {
-			init("options/test1.xml");
+			init("options/options.xml");
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
 				| IOException e) {
 			e.getMessage();
