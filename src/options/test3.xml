@@ -14,6 +14,6 @@
 	<entry key="deviationTempsMoyenConsommation">1</entry>
 	<entry key="nombreMoyenDeProduction">4</entry>
 	<entry key="deviationNombreMoyenDeProduction">1</entry>
-	<entry key="nombreMoyenNbExemplaire">5</entry>
-	<entry key="deviationNombreMoyenNbExemplaire">3</entry>
+	<entry key="nombreMoyenNbExemplaire">1</entry>
+	<entry key="deviationNombreMoyenNbExemplaire">0</entry>
 </properties>
