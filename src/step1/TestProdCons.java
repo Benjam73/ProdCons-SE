@@ -40,7 +40,7 @@ public class TestProdCons extends Simulateur {
 		producerList = new ArrayList<Producteur>();
 
 		try {
-			init("options/options.xml");
+			init("options/test5.xml");
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
 				| IOException e) {
 			e.getMessage();
@@ -59,7 +59,8 @@ public class TestProdCons extends Simulateur {
 			Producteur newProducer = new Producteur(this, tempsMoyenProduction, deviationTempsMoyenProduction,
 					nbMessageToProduce, this.getBuffer());
 			producerList.add(newProducer);
-			System.out.println("Producer " + i + " will produce " + newProducer.nombreDeMessages() + " messages. ");
+			System.out.println(
+					newProducer.toString() + " will produce " + newProducer.nombreDeMessages() + " messages. ");
 			newProducer.start();
 		}
 		// Consumer
