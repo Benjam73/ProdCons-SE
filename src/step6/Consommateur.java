@@ -1,4 +1,4 @@
-package step5;
+package step6;
 
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
@@ -27,7 +27,6 @@ public class Consommateur extends Acteur implements _Consommateur {
 	@Override
 	public void run() {
 		while ((this.getBuffer().enAttente() != 0) || (simulator.hasProducer())) {
-
 			int timeToConsume = randomConsumptionDuration();
 			try {
 				Message removedMessage = this.getBuffer().get(this);

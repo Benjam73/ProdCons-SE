@@ -1,9 +1,8 @@
-package step5;
+package step6;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -31,9 +30,6 @@ public class TestProdCons extends Simulateur {
 	private List<Consommateur> consumerList;
 	private List<Producteur> producerList;
 
-	private List<Producteur> producerThreadList;
-	private List<Consommateur> consumerThreadList;
-
 	private Aleatoire nbMessageToProduceRandomVariable;
 
 	private ProdCons buffer;
@@ -44,8 +40,6 @@ public class TestProdCons extends Simulateur {
 		consumerList = new ArrayList<Consommateur>();
 		producerList = new ArrayList<Producteur>();
 
-		producerThreadList = new ArrayList<Producteur>();
-		consumerThreadList = new ArrayList<Consommateur>();
 		try {
 			init("options/options.xml");
 			observateur.init(nbProd, nbCons, nbBuffer);
@@ -66,7 +60,6 @@ public class TestProdCons extends Simulateur {
 					deviationTempsMoyenProduction, nbMessageToProduce, this.getBuffer());
 			observateur.newProducteur(newProducer);
 			producerList.add(newProducer);
-			producerThreadList.add(newProducer);
 			newProducer.start();
 		}
 		// Consumer
@@ -74,32 +67,9 @@ public class TestProdCons extends Simulateur {
 			Consommateur newConsumer = new Consommateur(this, observateur, tempsMoyenConsommation,
 					deviationTempsMoyenConsommation, this.getBuffer());
 			observateur.newConsommateur(newConsumer);
-			consumerList.add(newConsumer);
-			consumerThreadList.add(newConsumer);
+			this.getConsumerList().add(newConsumer);
 			newConsumer.start();
 		}
-
-		for (Iterator<Producteur> iterator = producerThreadList.iterator(); iterator.hasNext();) {
-			Producteur currentProducer = iterator.next();
-			currentProducer.join();
-		}
-
-		System.out.println("All the producing is done");
-		/* wait for consommateur termination */
-		while (buffer.enAttente() > 0) {
-			Thread.yield();
-		}
-
-		/* Interruption of infinite loop of consommateur */
-		for (Iterator<Consommateur> iterator = consumerThreadList.iterator(); iterator.hasNext();) {
-
-			Consommateur currentConsumer = iterator.next();
-			currentConsumer.interrupt();
-			currentConsumer.join();
-
-		}
-
-		System.out.println("Verification by Observateur : " + (observateur.coherent() ? "OK" : "NOK"));
 	}
 
 	private ProdCons getBuffer() {
