@@ -15,12 +15,20 @@ public class ProdCons implements Tampon {
 	Queue<Message> queue;
 	private int msgNumber = 0;
 
+	/**
+	 * 
+	 * @param capacity
+	 *            The maximum size of the buffer where the messages are put
+	 */
 	public ProdCons(Integer capacity) {
 		super();
 		this.capacity = capacity;
 		this.queue = new LinkedList<Message>();
 	}
 
+	/**
+	 * @return the number of awaiting messages in the buffer
+	 */
 	@Override
 	public int enAttente() {
 		return queue.size();
@@ -31,6 +39,11 @@ public class ProdCons implements Tampon {
 		msgNumber++;
 	}
 
+	/**
+	 * Allow a Consommateur to get the first awaiting message in the buffer
+	 * 
+	 * NotifyAll the threads whom might by in a waiting state
+	 */
 	@Override
 	public synchronized Message get(_Consommateur arg0) throws Exception, InterruptedException {
 		while (!(enAttente() > 0)) {
@@ -47,6 +60,11 @@ public class ProdCons implements Tampon {
 		return resultingMessage;
 	}
 
+	/**
+	 * Allow a Produteur to put a new Message in the buffer
+	 * 
+	 * NotifyAll the threads whom might by in a waiting state
+	 */
 	@Override
 	public synchronized void put(_Producteur arg0, Message arg1) throws Exception, InterruptedException {
 		while (!(enAttente() < taille())) {
