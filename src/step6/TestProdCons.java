@@ -78,6 +78,7 @@ public class TestProdCons extends Simulateur {
 			producerList.add(newProducer);
 			producerThreadList.add(newProducer);
 			Debugger.log(newProducer.toString() + " will produce " + newProducer.nombreDeMessages() + " messages. ");
+
 			newProducer.start();
 		}
 		// Consumer
