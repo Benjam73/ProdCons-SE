@@ -68,6 +68,7 @@ public class TestProdCons extends Simulateur {
 					deviationTempsMoyenProduction, nbMessageToProduce, this.getBuffer());
 			observateur.newProducteur(newProducer);
 			producerList.add(newProducer);
+			producerThreadList.add(newProducer);
 			newProducer.start();
 		}
 		// Consumer
@@ -76,6 +77,7 @@ public class TestProdCons extends Simulateur {
 					deviationTempsMoyenConsommation, this.getBuffer());
 			observateur.newConsommateur(newConsumer);
 			this.getConsumerList().add(newConsumer);
+			consumerThreadList.add(newConsumer);
 			newConsumer.start();
 		}
 

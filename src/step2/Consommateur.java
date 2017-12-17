@@ -29,9 +29,13 @@ public class Consommateur extends Acteur implements _Consommateur {
 		while ((this.getBuffer().enAttente() != 0) || (simulator.hasProducer())) {
 			int timeToConsume = randomConsumptionDuration();
 			try {
-				Debugger.log(this.toString() + " received message " + this.getBuffer().get(this).toString());
-				sleep(timeToConsume);
-				newMessageConsumed();
+				try {
+					Debugger.log(this.toString() + " received message " + this.getBuffer().get(this).toString());
+					sleep(timeToConsume);
+					newMessageConsumed();
+				} catch (InterruptedException e) {
+					currentThread().interrupt();
+				}
 			} catch (Exception e) {
 				e.getMessage();
 				e.printStackTrace();

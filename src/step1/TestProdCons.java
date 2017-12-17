@@ -3,6 +3,7 @@ package step1;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -23,7 +24,7 @@ public class TestProdCons extends Simulateur {
 	private int deviationTempsMoyenConsommation;
 	private int nombreMoyenDeProduction;
 	private int deviationNombreMoyenDeProduction;
-	// Unused on V1
+	// Unused on step1
 	private int nombreMoyenNbExemplaire;
 	private int deviationNombreMoyenNbExemplaire;
 
@@ -34,14 +35,20 @@ public class TestProdCons extends Simulateur {
 
 	private ProdCons buffer;
 
+	private List<Consommateur> consumerThreadList;
+	private List<Producteur> producerThreadList;
+
 	public TestProdCons(Observateur observateur) {
 
 		super(observateur);
 		consumerList = new ArrayList<Consommateur>();
 		producerList = new ArrayList<Producteur>();
 
+		producerThreadList = new ArrayList<Producteur>();
+		consumerThreadList = new ArrayList<Consommateur>();
+
 		try {
-			init("options/test5.xml");
+			init("options/options.xml");
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
 				| IOException e) {
 			e.getMessage();
@@ -60,6 +67,7 @@ public class TestProdCons extends Simulateur {
 			Producteur newProducer = new Producteur(this, tempsMoyenProduction, deviationTempsMoyenProduction,
 					nbMessageToProduce, this.getBuffer());
 			producerList.add(newProducer);
+			producerThreadList.add(newProducer);
 			Debugger.log(newProducer.toString() + " will produce " + newProducer.nombreDeMessages() + " messages. ");
 			newProducer.start();
 		}
@@ -68,7 +76,27 @@ public class TestProdCons extends Simulateur {
 			Consommateur newConsumer = new Consommateur(this, tempsMoyenConsommation, deviationTempsMoyenConsommation,
 					this.getBuffer());
 			this.getConsumerList().add(newConsumer);
+			consumerThreadList.add(newConsumer);
 			newConsumer.start();
+		}
+
+		for (Iterator<Producteur> iterator = producerThreadList.iterator(); iterator.hasNext();) {
+			Producteur currentProducer = iterator.next();
+			currentProducer.join();
+		}
+
+		/* wait for consommateur termination */
+		while (buffer.enAttente() > 0) {
+			Thread.yield();
+		}
+
+		/* Interruption of sleeping consommateur */
+		for (Iterator<Consommateur> iterator = consumerThreadList.iterator(); iterator.hasNext();) {
+
+			Consommateur currentConsumer = iterator.next();
+			currentConsumer.interrupt();
+			currentConsumer.join();
+
 		}
 	}
 

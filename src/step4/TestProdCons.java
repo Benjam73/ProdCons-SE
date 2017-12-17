@@ -47,7 +47,7 @@ public class TestProdCons extends Simulateur {
 		consumerThreadList = new ArrayList<Consommateur>();
 
 		try {
-			init("options/options.xml");
+			init("options/test13.xml");
 			observateur.init(nbProd, nbCons, nbBuffer);
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
 				| IOException | ControlException e) {
