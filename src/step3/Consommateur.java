@@ -20,7 +20,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 	 * @param simulator
 	 *            The Prod/Cons simulation
 	 * @param observateur
-	 *            The Observateur of the global program
+	 *            The default Observateur of the global program
 	 * @param moyenneTempsDeTraitement
 	 *            The Average duration used to consume a message
 	 * @param deviationTempsDeTraitement

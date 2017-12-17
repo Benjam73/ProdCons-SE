@@ -16,6 +16,22 @@ public class Consommateur extends Acteur implements _Consommateur {
 	private TestProdCons simulator;
 	MyObserver myObserver;
 
+	/**
+	 * 
+	 * @param simulator
+	 *            The Prod/Cons simulation
+	 * @param observateur
+	 *            The Default Observateur of the global program
+	 * @param moyenneTempsDeTraitement
+	 *            The Average duration used to consume a message
+	 * @param deviationTempsDeTraitement
+	 *            The consumtpion's time variance
+	 * @param buffer
+	 *            The ProdCons instantiation used to get message
+	 * @param myObserver
+	 *            Our own developed observer
+	 * @throws ControlException
+	 */
 	protected Consommateur(TestProdCons simulator, Observateur observateur, int moyenneTempsDeTraitement,
 			int deviationTempsDeTraitement, ProdCons buffer, MyObserver myObserver) throws ControlException {
 
@@ -27,6 +43,10 @@ public class Consommateur extends Acteur implements _Consommateur {
 		this.myObserver = myObserver;
 	}
 
+	/**
+	 * The main loop of a Consummateur Thread. Loop until the ProdCons buffer
+	 * isn't empty or, some producer are waiting to produce their message
+	 */
 	@Override
 	public void run() {
 		while ((this.getBuffer().enAttente() != 0) || (simulator.hasProducer())) {
@@ -53,23 +73,40 @@ public class Consommateur extends Acteur implements _Consommateur {
 		Debugger.log(this.toString() + " dies");
 	}
 
+	/**
+	 * 
+	 * @return A new consumption duration time
+	 */
 	private int randomConsumptionDuration() {
 		return consumptionDurationRandomVariable.next();
 	}
 
+	/**
+	 * Increase by 1 the number of message consumed
+	 */
 	private void newMessageConsumed() {
 		alreadyConsumed++;
 	}
 
+	/**
+	 * @return A string conversion of a Consommateur instance
+	 */
 	public String toString() {
 		return "[Consommateur " + this.identification() + "]";
 	}
 
+	/**
+	 * @return the number of message already consumed
+	 */
 	@Override
 	public int nombreDeMessages() {
 		return alreadyConsumed;
 	}
 
+	/**
+	 * 
+	 * @return the ProdCons buffer
+	 */
 	private ProdCons getBuffer() {
 		return this.buffer;
 	}

@@ -25,7 +25,7 @@ public class Producteur extends Acteur implements _Producteur {
 	 * @param simulator
 	 *            The Prod/Cons simulation
 	 * @param observateur
-	 *            The Observateur of the global program
+	 *            The default Observateur of the global program
 	 * @param moyenneTempsDeTraitement
 	 *            The Average duration used to produce a message
 	 * @param deviationTempsDeTraitement
