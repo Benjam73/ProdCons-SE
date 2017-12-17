@@ -19,6 +19,11 @@ public class MessageX implements Message {
 	// Unique id built using Producer and production number
 	private String id;
 
+	/**
+	 * 
+	 * @param messageProducer
+	 *            The Producteur who has created the new MessageX
+	 */
 	public MessageX(Producteur messageProducer) {
 		super();
 		this.messageProducer = messageProducer;
@@ -28,6 +33,9 @@ public class MessageX implements Message {
 		this.consumptionNumber = null;
 	}
 
+	/**
+	 * @return The String conversion of a MessageX
+	 */
 	public String toString() {
 		String res;
 		if (messageXNumber != null) {
@@ -39,6 +47,11 @@ public class MessageX implements Message {
 		return res;
 	}
 
+	/**
+	 * 
+	 * @return The historic of the Message, who has produced it and who has
+	 *         consumed it
+	 */
 	public String history() {
 		String resultString = new String();
 		resultString = resultString.concat(

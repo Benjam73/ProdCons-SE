@@ -17,6 +17,20 @@ public class Producteur extends Acteur implements _Producteur {
 	private Aleatoire productionDurationRandomVariable;
 	private TestProdCons simulator;
 
+	/**
+	 * 
+	 * @param simulator
+	 *            The Prod/Cons simulation
+	 * @param moyenneTempsDeTraitement
+	 *            The Average duration used to produce a message
+	 * @param deviationTempsDeTraitement
+	 *            The production's time variance
+	 * @param nbMessageToProduce
+	 *            The message number the Producteur will make
+	 * @param buffer
+	 *            The ProdCons instantiation used to get message
+	 * @throws ControlException
+	 */
 	protected Producteur(TestProdCons simulator, int moyenneTempsDeTraitement, int deviationTempsDeTraitement,
 			int nbMessageToProduce, ProdCons buffer) throws ControlException {
 		super(typeProducteur, new Observateur(), moyenneTempsDeTraitement, deviationTempsDeTraitement);
@@ -27,6 +41,9 @@ public class Producteur extends Acteur implements _Producteur {
 		this.simulator = simulator;
 	}
 
+	/**
+	 * the main loop of a Producteur Thread. Loop until all message are created.
+	 */
 	@Override
 	public void run() {
 		while (alreadyProduced < nbMessageToProduce) {
