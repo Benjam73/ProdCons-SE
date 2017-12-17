@@ -154,7 +154,6 @@ public class MyObserver {
 	public synchronized void messageDeposition(Producteur producer, Message message) throws ControlException {
 		if (producer == null) {
 			coherence = false;
-			System.out.println("1");
 		}
 		if (!producerList.contains(producer)) {
 			coherence = false;

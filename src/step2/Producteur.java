@@ -1,5 +1,6 @@
 package step2;
 
+import common.Debugger;
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
@@ -18,7 +19,7 @@ public class Producteur extends Acteur implements _Producteur {
 
 	protected Producteur(TestProdCons simulator, int moyenneTempsDeTraitement, int deviationTempsDeTraitement,
 			int nbMessageToProduce, ProdCons buffer) throws ControlException {
-		super(Type.typeProducteur.getValue(), new Observateur(), moyenneTempsDeTraitement, deviationTempsDeTraitement);
+		super(typeProducteur, new Observateur(), moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		this.nbMessageToProduce = nbMessageToProduce;
 		this.buffer = buffer;
 		productionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
