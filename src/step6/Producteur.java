@@ -1,5 +1,6 @@
 package step6;
 
+import common.Debugger;
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
@@ -15,15 +16,18 @@ public class Producteur extends Acteur implements _Producteur {
 	private ProdCons buffer;
 	private Aleatoire productionDurationRandomVariable;
 	private TestProdCons simulator;
+	private MyObserver myObserver;
 
 	protected Producteur(TestProdCons simulator, Observateur observateur, int moyenneTempsDeTraitement,
-			int deviationTempsDeTraitement, int nbMessageToProduce, ProdCons buffer) throws ControlException {
+			int deviationTempsDeTraitement, int nbMessageToProduce, ProdCons buffer, MyObserver myObserver)
+			throws ControlException {
 		super(typeProducteur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		this.nbMessageToProduce = nbMessageToProduce;
 		this.buffer = buffer;
 		productionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		alreadyProduced = 0;
 		this.simulator = simulator;
+		this.myObserver = myObserver;
 	}
 
 	@Override
@@ -33,15 +37,18 @@ public class Producteur extends Acteur implements _Producteur {
 			int timeToProduce = randomProductionDuration();
 			try {
 				observateur.productionMessage(this, newMessage, timeToProduce);
+				myObserver.messageProduction(this, newMessage, timeToProduce);
 				sleep(timeToProduce);
 				this.getBuffer().put(this, newMessage);
 				observateur.depotMessage(this, newMessage);
+				myObserver.messageDeposition(this, newMessage);
 				oneNewMessageCreated();
 			} catch (Exception e) {
 				e.getMessage();
 			}
 		}
 		simulator.removeProducer(this);
+		Debugger.log(this.toString() + " dies");
 	}
 
 	private void oneNewMessageCreated() {
@@ -54,10 +61,7 @@ public class Producteur extends Acteur implements _Producteur {
 
 	@Override
 	public int nombreDeMessages() {
-
-		// TODO Auto-generated method stub
-
-		return 0;
+		return nbMessageToProduce;
 	}
 
 	public Integer alreadyProduced() {

@@ -1,5 +1,6 @@
 package step6;
 
+import common.Debugger;
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
@@ -13,15 +14,17 @@ public class Consommateur extends Acteur implements _Consommateur {
 	private Aleatoire consumptionDurationRandomVariable;
 	private Integer alreadyConsumed;
 	private TestProdCons simulator;
+	MyObserver myObserver;
 
 	protected Consommateur(TestProdCons simulator, Observateur observateur, int moyenneTempsDeTraitement,
-			int deviationTempsDeTraitement, ProdCons buffer) throws ControlException {
+			int deviationTempsDeTraitement, ProdCons buffer, MyObserver myObserver) throws ControlException {
 
 		super(typeConsommateur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		this.buffer = buffer;
 		consumptionDurationRandomVariable = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		alreadyConsumed = 0;
 		this.simulator = simulator;
+		this.myObserver = myObserver;
 	}
 
 	@Override
@@ -29,17 +32,25 @@ public class Consommateur extends Acteur implements _Consommateur {
 		while ((this.getBuffer().enAttente() != 0) || (simulator.hasProducer())) {
 			int timeToConsume = randomConsumptionDuration();
 			try {
-				Message removedMessage = this.getBuffer().get(this);
-				System.out.println(this.toString() + " received message " + removedMessage.toString());
-				observateur.retraitMessage(this, removedMessage);
-				sleep(timeToConsume);
-				observateur.consommationMessage(this, removedMessage, timeToConsume);
-				newMessageConsumed();
+				try {
+					Message removedMessage = this.getBuffer().get(this);
+					Debugger.log(this.toString() + " received message " + removedMessage.toString());
+					observateur.retraitMessage(this, removedMessage);
+					myObserver.messageRemoved(this, removedMessage);
+					sleep(timeToConsume);
+					observateur.consommationMessage(this, removedMessage, timeToConsume);
+					myObserver.messageConsumption(this, removedMessage, timeToConsume);
+					newMessageConsumed();
+				} catch (InterruptedException e) {
+					currentThread().interrupt();
+				}
+
 			} catch (Exception e) {
 				e.getMessage();
 				e.printStackTrace();
 			}
 		}
+		Debugger.log(this.toString() + " dies");
 	}
 
 	private int randomConsumptionDuration() {

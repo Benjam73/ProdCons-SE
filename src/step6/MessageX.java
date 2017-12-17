@@ -4,6 +4,10 @@ import jus.poc.prodcons.Message;
 
 public class MessageX implements Message {
 
+	// null if messageX ain't in buffer yet, its global buffer order rank
+	// otherwise
+	private Integer messageXNumber = null;
+
 	// MessageX is the productionNumber-th produced by messageProducer
 	private Producteur messageProducer;
 	private Integer productionNumber;
@@ -20,12 +24,20 @@ public class MessageX implements Message {
 		this.messageProducer = messageProducer;
 		this.productionNumber = messageProducer.alreadyProduced();
 		this.id = "[" + messageProducer.identification() + ", " + getProductionNumber() + "]";
+
 		this.messageConsumer = null;
 		this.consumptionNumber = null;
 	}
 
 	public String toString() {
-		return id;
+		String res;
+		if (messageXNumber != null) {
+			res = "[" + messageXNumber.toString() + ", " + messageProducer.identification() + ", "
+					+ getProductionNumber() + "]";
+		} else {
+			res = id;
+		}
+		return res;
 	}
 
 	public String history() {
@@ -49,6 +61,10 @@ public class MessageX implements Message {
 
 	private void setConsumptionNumber(Integer consumptionNumber) {
 		this.consumptionNumber = consumptionNumber;
+	}
+
+	public void setId(Integer msgNumber) {
+		messageXNumber = msgNumber;
 	}
 
 	// Getters

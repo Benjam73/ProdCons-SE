@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.Semaphore;
 
+import common.Debugger;
 import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Tampon;
 import jus.poc.prodcons._Consommateur;
@@ -13,6 +14,7 @@ public class ProdCons implements Tampon {
 
 	Integer capacity;
 	Queue<Message> queue;
+	private int msgNumber = 0;
 
 	Semaphore fifoProducer;
 	Semaphore fifoConsumer;
@@ -32,6 +34,11 @@ public class ProdCons implements Tampon {
 		return queue.size();
 	}
 
+	public void setMessageId(MessageX msg) {
+		msg.setId(msgNumber);
+		msgNumber++;
+	}
+
 	@Override
 	public Message get(_Consommateur arg0) throws Exception, InterruptedException {
 		Message resultingMessage;
@@ -42,7 +49,8 @@ public class ProdCons implements Tampon {
 		if (resultingMessage == null) {
 			throw new Exception("Couldn't poll message");
 		}
-
+		Debugger.log("get by " + arg0.toString() + " of " + resultingMessage.toString() + " with " + enAttente()
+				+ " messages remaining in buffer");
 		mutex.release();
 		fifoProducer.release();
 		return resultingMessage;
@@ -52,7 +60,9 @@ public class ProdCons implements Tampon {
 	public void put(_Producteur arg0, Message arg1) throws Exception, InterruptedException {
 		fifoProducer.acquire();
 		mutex.acquire();
-
+		setMessageId((MessageX) arg1);
+		Debugger.log("put by " + arg0.toString() + " of " + arg1.toString() + " with remaining capacity = "
+				+ (taille() - enAttente()));
 		queue.add(arg1);
 
 		mutex.release();
