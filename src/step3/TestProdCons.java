@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import common.Debugger;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
 import jus.poc.prodcons.Observateur;
@@ -38,6 +39,9 @@ public class TestProdCons extends Simulateur {
 	private List<Consommateur> consumerThreadList;
 	private List<Producteur> producerThreadList;
 
+	/**
+	 * the main loop of a Producteur Thread. Loop until all message are created.
+	 */
 	public TestProdCons(Observateur observateur) {
 
 		super(observateur);
@@ -48,7 +52,7 @@ public class TestProdCons extends Simulateur {
 		consumerThreadList = new ArrayList<Consommateur>();
 
 		try {
-			init("options/options.xml");
+			init("options/test6.xml");
 			observateur.init(nbProd, nbCons, nbBuffer);
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
 				| IOException | ControlException e) {
@@ -58,6 +62,10 @@ public class TestProdCons extends Simulateur {
 		nbMessageToProduceRandomVariable = new Aleatoire(nombreMoyenDeProduction, deviationNombreMoyenDeProduction);
 	}
 
+	/**
+	 * Main loop of the program, create, launch and wait for all the thread to
+	 * finish
+	 */
 	@Override
 	protected void run() throws Exception {
 		// Producer
@@ -67,6 +75,7 @@ public class TestProdCons extends Simulateur {
 					deviationTempsMoyenProduction, nbMessageToProduce, this.getBuffer());
 			observateur.newProducteur(newProducer);
 			producerList.add(newProducer);
+			producerThreadList.add(newProducer);
 			newProducer.start();
 		}
 		// Consumer
@@ -75,6 +84,7 @@ public class TestProdCons extends Simulateur {
 					deviationTempsMoyenConsommation, this.getBuffer());
 			observateur.newConsommateur(newConsumer);
 			this.getConsumerList().add(newConsumer);
+			consumerThreadList.add(newConsumer);
 			newConsumer.start();
 		}
 
@@ -97,7 +107,7 @@ public class TestProdCons extends Simulateur {
 
 		}
 
-		System.out.println("Verification by Observateur : " + (observateur.coherent() ? "OK" : "NOK"));
+		Debugger.log("Verification by Observateur : " + (observateur.coherent() ? "OK" : "NOK"));
 	}
 
 	private ProdCons getBuffer() {
@@ -112,6 +122,9 @@ public class TestProdCons extends Simulateur {
 		return nbMessageToProduceRandomVariable.next();
 	}
 
+	/**
+	 * Given method
+	 */
 	protected void init(String file) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException,
 			SecurityException, InvalidPropertiesFormatException, IOException {
 		Properties properties = new Properties();
@@ -126,6 +139,11 @@ public class TestProdCons extends Simulateur {
 		}
 	}
 
+	/**
+	 * 
+	 * @param args
+	 *            The program arguments : here not arguments are needed
+	 */
 	public static void main(String[] args) {
 
 		TestProdCons myTest = new TestProdCons(new Observateur());

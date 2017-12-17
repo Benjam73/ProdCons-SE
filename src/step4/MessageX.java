@@ -16,7 +16,13 @@ public class MessageX implements Message {
 	private String id;
 
 	private int copyNumber;
+	private Integer messageXNumber = null;
 
+	/**
+	 * 
+	 * @param messageProducer
+	 *            The Producteur who has created the new MessageX
+	 */
 	public MessageX(Producteur messageProducer, int copyNumber) {
 		super();
 		this.messageProducer = messageProducer;
@@ -28,10 +34,25 @@ public class MessageX implements Message {
 
 	}
 
+	/**
+	 * @return The String conversion of a MessageX
+	 */
 	public String toString() {
-		return id;
+		String res;
+		if (messageXNumber != null) {
+			res = "[" + messageXNumber.toString() + ", " + messageProducer.identification() + ", "
+					+ getProductionNumber() + ", " + copyNumber + "]";
+		} else {
+			res = id;
+		}
+		return res;
 	}
 
+	/**
+	 * 
+	 * @return The historic of the Message, who has produced it and who has
+	 *         consumed it
+	 */
 	public String history() {
 		String resultString = new String();
 		resultString = resultString.concat(
@@ -53,6 +74,10 @@ public class MessageX implements Message {
 
 	private void setConsumptionNumber(Integer consumptionNumber) {
 		this.consumptionNumber = consumptionNumber;
+	}
+
+	public void setId(Integer msgNumber) {
+		messageXNumber = msgNumber;
 	}
 
 	// Getters

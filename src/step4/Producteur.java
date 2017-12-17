@@ -20,6 +20,25 @@ public class Producteur extends Acteur implements _Producteur {
 	private Aleatoire copyOfEachMessageRandomVariable;
 	private Semaphore semProd;
 
+	/**
+	 * 
+	 * @param simulator
+	 *            The Prod/Cons simulation
+	 * @param observateur
+	 *            The Observateur of the global program
+	 * @param moyenneTempsDeTraitement
+	 *            The Average duration used to produce a message
+	 * @param deviationTempsDeTraitement
+	 *            The production's time variance
+	 * @param nbMessageToProduce
+	 *            The message number the Producteur will make
+	 * @param buffer
+	 *            The ProdCons instantiation used to get message
+	 * @param copyOfEachMessageRandomVariable
+	 *            The random law used to get a random copy number for each
+	 *            message
+	 * @throws ControlException
+	 */
 	protected Producteur(TestProdCons simulator, Observateur observateur, int moyenneTempsDeTraitement,
 			int deviationTempsDeTraitement, int nbMessageToProduce, ProdCons buffer,
 			Aleatoire copyOfEachMessageRandomVariable) throws ControlException {
@@ -33,6 +52,9 @@ public class Producteur extends Acteur implements _Producteur {
 		semProd = new Semaphore(1, true);
 	}
 
+	/**
+	 * the main loop of a Producteur Thread. Loop until all message are created.
+	 */
 	@Override
 	public void run() {
 		while (alreadyProduced < nbMessageToProduce) {

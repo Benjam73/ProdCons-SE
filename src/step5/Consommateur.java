@@ -1,5 +1,6 @@
 package step5;
 
+import common.Debugger;
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
@@ -32,7 +33,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 			try {
 				try {
 					Message removedMessage = this.getBuffer().get(this);
-					System.out.println(this.toString() + " received message " + removedMessage.toString());
+					Debugger.log(this.toString() + " received message " + removedMessage.toString());
 					observateur.retraitMessage(this, removedMessage);
 					sleep(timeToConsume);
 					observateur.consommationMessage(this, removedMessage, timeToConsume);
