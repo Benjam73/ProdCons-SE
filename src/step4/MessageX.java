@@ -18,6 +18,11 @@ public class MessageX implements Message {
 	private int copyNumber;
 	private Integer messageXNumber = null;
 
+	/**
+	 * 
+	 * @param messageProducer
+	 *            The Producteur who has created the new MessageX
+	 */
 	public MessageX(Producteur messageProducer, int copyNumber) {
 		super();
 		this.messageProducer = messageProducer;
@@ -29,6 +34,9 @@ public class MessageX implements Message {
 
 	}
 
+	/**
+	 * @return The String conversion of a MessageX
+	 */
 	public String toString() {
 		String res;
 		if (messageXNumber != null) {
@@ -40,6 +48,11 @@ public class MessageX implements Message {
 		return res;
 	}
 
+	/**
+	 * 
+	 * @return The historic of the Message, who has produced it and who has
+	 *         consumed it
+	 */
 	public String history() {
 		String resultString = new String();
 		resultString = resultString.concat(

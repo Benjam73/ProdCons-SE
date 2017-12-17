@@ -38,6 +38,9 @@ public class TestProdCons extends Simulateur {
 
 	private ProdCons buffer;
 
+	/**
+	 * the main loop of a Producteur Thread. Loop until all message are created.
+	 */
 	public TestProdCons(Observateur observateur) {
 
 		super(observateur);
@@ -57,6 +60,10 @@ public class TestProdCons extends Simulateur {
 		nbMessageToProduceRandomVariable = new Aleatoire(nombreMoyenDeProduction, deviationNombreMoyenDeProduction);
 	}
 
+	/**
+	 * Main loop of the program, create, launch and wait for all the thread to
+	 * finish
+	 */
 	@Override
 	protected void run() throws Exception {
 		// Producer
@@ -116,6 +123,9 @@ public class TestProdCons extends Simulateur {
 		return nbMessageToProduceRandomVariable.next();
 	}
 
+	/**
+	 * Given method
+	 */
 	protected void init(String file) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException,
 			SecurityException, InvalidPropertiesFormatException, IOException {
 		Properties properties = new Properties();
@@ -130,6 +140,11 @@ public class TestProdCons extends Simulateur {
 		}
 	}
 
+	/**
+	 * 
+	 * @param args
+	 *            The program arguments : here not arguments are needed
+	 */
 	public static void main(String[] args) {
 
 		TestProdCons myTest = new TestProdCons(new Observateur());

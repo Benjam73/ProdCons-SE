@@ -21,6 +21,11 @@ public class ProdCons implements Tampon {
 
 	private int msgNumber = 0;
 
+	/**
+	 * 
+	 * @param capacity
+	 *            The maximum size of the buffer where the messages are put
+	 */
 	public ProdCons(Integer capacity) {
 		super();
 		this.capacity = capacity;
@@ -30,6 +35,9 @@ public class ProdCons implements Tampon {
 		mutex = new Semaphore(1, true);
 	}
 
+	/**
+	 * @return the number of awaiting messages in the buffer
+	 */
 	@Override
 	public int enAttente() {
 		return queue.size();
@@ -40,7 +48,11 @@ public class ProdCons implements Tampon {
 		msgNumber++;
 	}
 
-	@SuppressWarnings("unused")
+	/**
+	 * Allow a Consommateur to get the first awaiting message in the buffer
+	 * 
+	 * NotifyAll the threads whom might by in a waiting state
+	 */
 	@Override
 	public Message get(_Consommateur arg0) throws Exception, InterruptedException {
 		Message resultingMessage;
@@ -71,6 +83,11 @@ public class ProdCons implements Tampon {
 		return resultingMessage;
 	}
 
+	/**
+	 * Allow a Produteur to put a new Message in the buffer
+	 * 
+	 * NotifyAll the threads whom might by in a waiting state
+	 */
 	@Override
 	public void put(_Producteur arg0, Message arg1) throws Exception, InterruptedException {
 		fifoProducer.acquire();
