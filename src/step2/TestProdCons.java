@@ -39,7 +39,9 @@ public class TestProdCons extends Simulateur {
 	private List<Producteur> producerThreadList;
 
 	/**
-	 * the main loop of a Producteur Thread. Loop until all message are created.
+	 * 
+	 * @param observateur
+	 *            Default Observateur
 	 */
 	public TestProdCons(Observateur observateur) {
 
